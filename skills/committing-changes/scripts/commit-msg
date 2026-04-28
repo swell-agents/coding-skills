@@ -1,0 +1,45 @@
+#!/bin/bash
+# Commit-msg hook: Enforce commit message rules
+
+MSG_FILE="$1"
+MSG=$(head -1 "$MSG_FILE")
+
+# Skip merge commits
+if echo "$MSG" | grep -qE '^Merge '; then
+    exit 0
+fi
+
+# Rule 1: First line must not be empty
+if [[ -z "$MSG" ]]; then
+    echo "ERROR: Commit message is empty."
+    exit 1
+fi
+
+# Rule 2: First line max 72 chars
+if [[ ${#MSG} -gt 72 ]]; then
+    echo "ERROR: Subject line is ${#MSG} chars (max 72)."
+    echo "  -> $MSG"
+    exit 1
+fi
+
+# Rule 3: Must start with a capital letter (imperative mood)
+if ! echo "$MSG" | grep -qE '^[A-Z]'; then
+    echo "ERROR: Subject must start with a capital letter (imperative mood)."
+    echo "  -> $MSG"
+    exit 1
+fi
+
+# Rule 4: Must not end with a period
+if echo "$MSG" | grep -qE '\.$'; then
+    echo "ERROR: Subject must not end with a period."
+    echo "  -> $MSG"
+    exit 1
+fi
+
+# Rule 5: No Co-Authored-By lines
+if grep -qiE '^Co-Authored-By:' "$MSG_FILE"; then
+    echo "ERROR: Co-Authored-By lines are not allowed."
+    exit 1
+fi
+
+exit 0

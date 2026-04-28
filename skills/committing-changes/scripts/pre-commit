@@ -1,0 +1,40 @@
+#!/bin/bash
+# Pre-commit hook: Run CI checks before committing
+# Reads project commands from CLAUDE.md [ci] section if present,
+# otherwise detects stack and runs defaults.
+
+set -e
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+# ── Python (uv) ────────────────────────────────────────────────────────────
+if [[ -f "pyproject.toml" ]] && command -v uv &>/dev/null; then
+    echo "→ ruff format"
+    uv run ruff format --check src tests
+
+    echo "→ ruff lint"
+    uv run ruff check src tests
+
+    echo "→ mypy"
+    # infer package name from src/ (first directory)
+    PKG=$(ls src/ | head -1)
+    uv run mypy "src/${PKG}"
+
+    echo "→ pytest"
+    uv run pytest -q --tb=short
+
+    echo "✓ All checks passed"
+    exit 0
+fi
+
+# ── Node (npm/yarn) ────────────────────────────────────────────────────────
+if [[ -f "package.json" ]]; then
+    if command -v npm &>/dev/null; then
+        echo "→ npm test"
+        npm test --if-present
+    fi
+    exit 0
+fi
+
+exit 0
