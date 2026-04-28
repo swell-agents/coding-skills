@@ -10,6 +10,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-04-28
+
+### Added
+
+- `scripts/bootstrap.sh` — harness-agnostic shell script that detects every instruction file in a project (CLAUDE.md / AGENTS.md / .cursorrules) and patches each with a coding-skills reference block, creating CLAUDE.md if none exist. Idempotent via a `<!-- coding-skills-bootstrap -->` marker.
+- `commands/bootstrap.md` — Claude Code slash-command wrapper (`/coding-skills:bootstrap`) that runs the bootstrap script via `${CLAUDE_PLUGIN_ROOT}`.
+
+### Changed
+
+- `engineering-philosophy` description widened to fire on any code-related task (write / edit / design / refactor / review), not just architecture and review. Co-activation list now spans every workflow + per-language skill.
+
 ## [1.0.0] — 2026-04-28
 
 First public release. Ten skills cover the full coding loop — five rule skills for language conventions, five workflow skills for the actions that operate on code.

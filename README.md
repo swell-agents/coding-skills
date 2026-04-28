@@ -61,6 +61,26 @@ skillnet download https://github.com/swell-agents/coding-skills/tree/main/skills
 
 Add the repo path to your project's MDC source roots; the `globs:` / `paths:` frontmatter drives auto-activation.
 
+## Bootstrap a project
+
+Skills are description-matched at retrieval; that is good enough for most cases but not guaranteed. When a project should *always* apply the engineering principles — not just when the matcher fires — patch the project's instruction file once:
+
+In Claude Code:
+
+```
+/coding-skills:bootstrap
+```
+
+In any other harness:
+
+```bash
+bash ~/.claude/plugins/swell-agents/coding-skills/scripts/bootstrap.sh
+# or, after `git clone`:
+bash scripts/bootstrap.sh
+```
+
+The script detects every instruction file the project uses (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`) and appends a coding-skills reference block to each. If none exist, it creates `CLAUDE.md`. Idempotent — re-running once the marker is in place is a no-op.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
