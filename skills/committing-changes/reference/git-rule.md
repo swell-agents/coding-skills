@@ -1,10 +1,10 @@
 ---
-purpose: Verbatim copy of claude-toolkit/rules/git.md
+purpose: Verbatim Claude-Code git rule body
 ---
 
-# Original `rules/git.md`
+# Original Claude-Code git rule
 
-Below is the unedited body of `swell-agents/claude-toolkit/rules/git.md`. The canonical `SKILL.md` integrates these rules into its Workflow + Rules sections for harness-agnostic consumption.
+Below is the unedited rule body. The canonical `SKILL.md` integrates these rules into its Workflow + Rules sections for harness-agnostic consumption.
 
 ---
 

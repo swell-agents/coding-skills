@@ -41,4 +41,4 @@ Look for:
 
 ## Manual scenarios
 
-For each skill, run 3–5 prompts from `tests/manual-scenarios/<skill>.md` in a Claude Code session that has this repo as a skill source. Verify the right skill (and expected co-activations) fires. Differences from `claude-toolkit` source behaviour are bugs in the canonical body.
+For each skill, run 3–5 prompts from `tests/manual-scenarios/<skill>.md` in a Claude Code session that has this repo as a skill source. Verify the right skill (and expected co-activations) fires. If a prompt fails to retrieve the intended skill, treat the canonical body as the bug, not the prompt.

@@ -1,10 +1,10 @@
 ---
-purpose: Verbatim copy of claude-toolkit/agents/security-auditor.md (originally model: opus)
+purpose: Verbatim Claude-Code security-auditor agent definition (originally model: opus)
 ---
 
 # Original security-auditor agent (Claude-Code, model class: opus)
 
-Below is the unedited body of `swell-agents/claude-toolkit/agents/security-auditor.md`. Preserved verbatim for the Claude-Code consumer. The canonical `SKILL.md` integrates the operationally relevant guidance for harness-agnostic consumption.
+Below is the unedited Claude-Code subagent definition. Preserved verbatim for the Claude-Code consumer; the canonical `SKILL.md` integrates the operationally relevant guidance for harness-agnostic consumption.
 
 ---
 

@@ -1,10 +1,10 @@
 ---
-purpose: Verbatim copy of claude-toolkit/commands/commit.md (Claude-Code slash-command form)
+purpose: Verbatim Claude-Code /commit slash-command body
 ---
 
 # Original `/commit` slash-command (Claude-Code-native)
 
-Below is the unedited body of `swell-agents/claude-toolkit/commands/commit.md`. Preserved here for the Claude-Code consumer. The canonical `SKILL.md` rewrites the same content for harness-agnostic consumption.
+Below is the unedited slash-command body. Preserved for the Claude-Code consumer; the canonical `SKILL.md` rewrites the same content for harness-agnostic consumption.
 
 ---
 

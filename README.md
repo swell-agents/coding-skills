@@ -1,6 +1,6 @@
 # coding-skills
 
-Canonical [Anthropic Agent Skills](https://docs.anthropic.com/en/docs/claude-code/skills) for software engineering — distilled from [`swell-agents/claude-toolkit`](https://github.com/swell-agents/claude-toolkit) into a portable, harness-agnostic format.
+Canonical [Anthropic Agent Skills](https://docs.anthropic.com/en/docs/claude-code/skills) for software engineering — packaged in a portable, harness-agnostic format.
 
 Each skill is a self-contained folder with `SKILL.md` (frontmatter + body), optional `scripts/`, and optional `reference/`. Skills are consumable by Claude Code, [SkillNet](https://github.com/zjunlp/SkillNet), Cursor 2.0 (via MDC frontmatter), OpenAI Codex Skills, and the Microsoft Agent Framework with no transformation.
 
@@ -49,20 +49,6 @@ Clone into `~/.claude/skills/` or symlink individual skills.
 ### Cursor
 
 Add the repo path to your project's MDC source roots; the `globs:` / `paths:` frontmatter drives auto-activation.
-
-## Not migrated from claude-toolkit
-
-The following are intentionally excluded from this repo. They live in [`swell-agents/claude-toolkit`](https://github.com/swell-agents/claude-toolkit) and stay there:
-
-| Artefact | Reason |
-|---|---|
-| `setup.sh` | Claude-Code symlink installer; canonical Skills are discovered by directory scan. |
-| `model:` frontmatter on agents | Not a canonical Skills field. Preserved verbatim in `reference/`. |
-| `[Extended thinking: …]` annotations | Claude-Code-only UI hint. Preserved verbatim in `reference/`. |
-| `@agent-name` cross-references | Claude-Code subagent invocation syntax. Rewritten to skill-name prose in bodies. |
-| `/slash-command` syntax | Claude-Code-specific. Rewritten to skill names in bodies. |
-| `params.toml` session state | Claude-Code-CLI working state. Canonical Skills are stateless. Documented as opt-in in `managing-github-issues/reference/`. |
-| `agents/researcher.md`, `commands/research.md`, `skills/pdf/` | Not coding-related. |
 
 ## Contributing
 

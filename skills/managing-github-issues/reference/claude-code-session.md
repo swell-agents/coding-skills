@@ -4,7 +4,7 @@ purpose: Optional params.toml session pattern for Claude-Code consumers — cano
 
 # Claude-Code session pattern (optional)
 
-Canonical Anthropic Skills are stateless — they receive context per invocation and don't keep working state. The original `claude-toolkit` PM commands maintained a `params.toml` session file at the project root to remember "I'm currently working on issue #N, in phase X, on branch Y." That state lives entirely on the consumer side.
+Canonical Anthropic Skills are stateless — they receive context per invocation and don't keep working state. Some Claude-Code workflows maintain a `params.toml` session file at the project root to remember "I'm currently working on issue #N, in phase X, on branch Y." That state lives entirely on the consumer side.
 
 This document describes the pattern as an **opt-in extension** for Claude-Code consumers. Other harnesses (SkillNet, Cursor, Microsoft Agent Framework) don't need it; the skill works without any session state.
 

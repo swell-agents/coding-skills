@@ -1,5 +1,5 @@
 ---
-purpose: Full 12-phase TDD pipeline with coverage thresholds and metrics, distilled from claude-toolkit/commands/tdd-cycle.md
+purpose: Full 12-phase TDD pipeline with coverage thresholds and metrics
 ---
 
 # Full TDD pipeline

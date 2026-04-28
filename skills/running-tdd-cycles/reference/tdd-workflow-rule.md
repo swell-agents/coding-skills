@@ -1,10 +1,10 @@
 ---
-purpose: Verbatim copy of claude-toolkit/rules/tdd-workflow.md
+purpose: Verbatim Claude-Code TDD workflow rule
 ---
 
-# Original `rules/tdd-workflow.md`
+# Original Claude-Code TDD workflow rule
 
-Below is the unedited body of `swell-agents/claude-toolkit/rules/tdd-workflow.md`. The canonical `SKILL.md` integrates this loop and adds language cues, anti-patterns, and validation checkpoints for harness-agnostic consumption.
+Below is the unedited rule body. The canonical `SKILL.md` integrates this loop and adds language cues, anti-patterns, and validation checkpoints for harness-agnostic consumption.
 
 ---
 

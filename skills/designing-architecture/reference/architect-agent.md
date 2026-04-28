@@ -1,10 +1,10 @@
 ---
-purpose: Verbatim copy of claude-toolkit/agents/architect.md (originally model: opus)
+purpose: Verbatim Claude-Code architect agent definition (originally model: opus)
 ---
 
 # Original architect agent (Claude-Code, model class: opus)
 
-Below is the unedited body of `swell-agents/claude-toolkit/agents/architect.md`. Preserved verbatim for the Claude-Code consumer.
+Below is the unedited Claude-Code subagent definition. Preserved verbatim for the Claude-Code consumer.
 
 ---
 

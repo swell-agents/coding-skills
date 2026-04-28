@@ -1,10 +1,10 @@
 ---
-purpose: Verbatim copy of claude-toolkit/agents/test-automator.md (originally model: sonnet)
+purpose: Verbatim Claude-Code test-automator agent definition (originally model: sonnet)
 ---
 
 # Original test-automator agent (Claude-Code, model class: sonnet)
 
-Below is the unedited body of `swell-agents/claude-toolkit/agents/test-automator.md`. The original was a Claude-Code subagent definition with `model: sonnet` and `description` frontmatter; preserved here verbatim for the Claude-Code consumer. The canonical `SKILL.md` integrates the operationally relevant guidance for harness-agnostic consumption.
+Below is the unedited Claude-Code subagent definition (`model: sonnet`, with `description` frontmatter). Preserved verbatim for the Claude-Code consumer; the canonical `SKILL.md` integrates the operationally relevant guidance for harness-agnostic consumption.
 
 ---
 

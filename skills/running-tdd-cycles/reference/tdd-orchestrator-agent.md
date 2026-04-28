@@ -1,10 +1,10 @@
 ---
-purpose: Verbatim copy of claude-toolkit/agents/tdd-orchestrator.md (originally model: opus)
+purpose: Verbatim Claude-Code tdd-orchestrator agent definition (originally model: opus)
 ---
 
 # Original tdd-orchestrator agent (Claude-Code, model class: opus)
 
-Below is the unedited body of `swell-agents/claude-toolkit/agents/tdd-orchestrator.md`. The original was a Claude-Code subagent definition with `model: opus` and `description` frontmatter; preserved here verbatim for the Claude-Code consumer. The canonical `SKILL.md` integrates the operationally relevant guidance for harness-agnostic consumption.
+Below is the unedited Claude-Code subagent definition (`model: opus`, with `description` frontmatter). Preserved verbatim for the Claude-Code consumer; the canonical `SKILL.md` integrates the operationally relevant guidance for harness-agnostic consumption.
 
 ---
 
