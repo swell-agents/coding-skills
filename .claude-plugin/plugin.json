@@ -1,0 +1,25 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "coding-skills",
+  "description": "Ten Anthropic Agent Skills for software engineering — running-tdd-cycles, reviewing-changes, designing-architecture, managing-github-issues, committing-changes, plus per-language conventions for Python, Go, Solidity, shell, and engineering-philosophy.",
+  "version": "1.0.0",
+  "author": {
+    "name": "swell-agents",
+    "email": "swell_ai@pm.me",
+    "url": "https://github.com/swell-agents"
+  },
+  "homepage": "https://github.com/swell-agents/coding-skills",
+  "repository": "https://github.com/swell-agents/coding-skills",
+  "license": "MIT",
+  "keywords": [
+    "tdd",
+    "code-review",
+    "architecture",
+    "python",
+    "go",
+    "solidity",
+    "shell",
+    "github-issues",
+    "engineering-philosophy"
+  ]
+}

@@ -36,15 +36,26 @@ Fields explicitly excluded from canonical SKILL.md frontmatter:
 
 ## Install
 
+### Claude Code (plugin)
+
+Inside any Claude Code session:
+
+```
+/plugin marketplace add swell-agents/coding-skills
+/plugin install coding-skills@swell-agents
+```
+
+Then `/reload-plugins`. All 10 skills become available; Claude Code auto-activates each one based on its description.
+
+### Claude Code (manual)
+
+Clone the repo and symlink individual skills into `~/.claude/skills/`.
+
 ### SkillNet
 
 ```
-skillnet add https://github.com/swell-agents/coding-skills
+skillnet download https://github.com/swell-agents/coding-skills/tree/main/skills/<skill-name>
 ```
-
-### Claude Code
-
-Clone into `~/.claude/skills/` or symlink individual skills.
 
 ### Cursor
 
