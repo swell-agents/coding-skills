@@ -34,3 +34,26 @@ Expected pairings (verified in `tests/manual-scenarios/`):
 - Solidity review → `reviewing-changes` + `solidity-conventions`
 - Go feature design → `designing-architecture` + `go-conventions` + `engineering-philosophy`
 - Any commit → `committing-changes` + `shell-discipline`
+
+## Claude Code wrappers (optional)
+
+Skills are the source of truth and run in any harness. Claude Code consumers also get thin wrappers in `agents/` and `commands/` that delegate back to the skills — same content, richer ergonomics. Other harnesses ignore these directories.
+
+### Agents
+
+| Agent | Wraps | Purpose |
+|---|---|---|
+| [@code-reviewer](agents/code-reviewer.md) | `reviewing-changes` Pass 1 | Code-quality pass only — KISS/YAGNI/DRY, SOLID, language conventions, test coverage |
+| [@security-auditor](agents/security-auditor.md) | `reviewing-changes` Pass 2 | Security pass only — OWASP Top 10, CVE scanners, smart-contract specifics |
+| [@architect-review](agents/architect-review.md) | `reviewing-changes` Pass 3 | Architecture pass only — SOLID, layer boundaries, library reuse, architecture map |
+
+### Slash commands
+
+| Command | Wraps |
+|---|---|
+| [/coding-skills:review](commands/review.md) | Launches the three review agents in parallel and aggregates findings |
+| [/coding-skills:commit](commands/commit.md) | `committing-changes` |
+| [/coding-skills:tdd](commands/tdd.md) | `running-tdd-cycles` |
+| [/coding-skills:pm](commands/pm.md) | `managing-github-issues` |
+| [/coding-skills:design](commands/design.md) | `designing-architecture` |
+| [/coding-skills:bootstrap](commands/bootstrap.md) | One-shot wiring into the project's instruction file |

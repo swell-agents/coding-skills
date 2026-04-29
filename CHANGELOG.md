@@ -10,6 +10,19 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-04-29
+
+### Added
+
+- `agents/code-reviewer.md`, `agents/security-auditor.md`, `agents/architect-review.md` — Claude-Code-only thin wrappers (model: opus) that scope the `reviewing-changes` skill to one pass each. Agent bodies `Read` the skill at runtime, so the skill stays the single source of truth and bumps propagate automatically.
+- `commands/review.md` — `/coding-skills:review [scope]` launches the three review agents in parallel and aggregates their findings into one Quality Gate Summary table.
+- `commands/commit.md`, `commands/tdd.md`, `commands/pm.md`, `commands/design.md` — slash-command wrappers around `committing-changes`, `running-tdd-cycles`, `managing-github-issues`, and `designing-architecture` respectively. Each is a ~10-line delegator; the wrapped skill remains the source of truth.
+
+### Changed
+
+- `README.md` and `INDEX.md` — document the new `agents/` and `commands/` directories and the harness matrix (Claude Code uses the wrappers; Cursor / Codex / SkillNet ignore them and use the skills directly).
+- `.claude-plugin/plugin.json` — version bump 1.2.0 → 1.3.0; description mentions the new agents and commands.
+
 ## [1.2.0] — 2026-04-29
 
 ### Added
