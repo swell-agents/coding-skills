@@ -4,6 +4,8 @@ Canonical [Anthropic Agent Skills](https://docs.anthropic.com/en/docs/claude-cod
 
 Each skill is a self-contained folder with `SKILL.md` (frontmatter + body), optional `scripts/`, and optional `reference/`. Skills are consumable by Claude Code, [SkillNet](https://github.com/zjunlp/SkillNet), Cursor 2.0 (via MDC frontmatter), OpenAI Codex Skills, and the Microsoft Agent Framework with no transformation.
 
+Claude Code consumers also get parallel-friendly **agents** under `agents/` (e.g. `@code-reviewer`, `@security-auditor`, `@architect-review`) and **slash commands** under `commands/` (e.g. `/coding-skills:review`, `/coding-skills:tdd`, `/coding-skills:commit`) that wrap the skills — same source of truth, richer harness ergonomics. Other harnesses ignore the `agents/` and `commands/` directories.
+
 ## Skill catalogue
 
 See [INDEX.md](INDEX.md) for the full list. Two kinds:
@@ -45,7 +47,16 @@ Inside any Claude Code session:
 /plugin install coding-skills@swell-agents
 ```
 
-Then `/reload-plugins`. All 10 skills become available; Claude Code auto-activates each one based on its description.
+Then `/reload-plugins`. All 10 skills become available (auto-activated by description), plus 3 parallel-review agents and 6 slash commands:
+
+| Slash command | Wraps |
+|---|---|
+| `/coding-skills:review [scope]` | Three `@code-reviewer` + `@security-auditor` + `@architect-review` agents in parallel; aggregates into one Quality Gate Summary |
+| `/coding-skills:commit [scope]` | `committing-changes` skill |
+| `/coding-skills:tdd [requirement\|phase]` | `running-tdd-cycles` skill |
+| `/coding-skills:pm <plan\|start\|next\|advance\|status\|create-issues>` | `managing-github-issues` skill |
+| `/coding-skills:design [topic]` | `designing-architecture` skill |
+| `/coding-skills:bootstrap` | One-shot wiring into the project's instruction file |
 
 ### Claude Code (manual)
 
