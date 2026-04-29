@@ -10,6 +10,19 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-04-29
+
+### Added
+
+- `skills/committing-changes/templates/pr-size.yml` — GitHub Actions workflow using `codelytv/pr-size-labeler@v1`. Labels `size/xs|s|m|l|xl` and fails when a PR exceeds 1000 changed lines, excluding tests, docs, lockfiles, vendored deps, and generated protobuf code. Threshold rationale: SmartBear/Cisco code-review study finds defect detection drops from ~87% (≤100 LOC) to ~28% (>1000 LOC); Google data shows median review time doubles per +100 LOC.
+- `skills/committing-changes/templates/gitattributes.example` — `linguist-generated`/`linguist-vendored` block for common lockfiles, generated protobuf code, and vendored deps so GitHub collapses them in PR diffs and size labelers skip them.
+- `skills/committing-changes/scripts/install-pr-size-workflow.sh` — idempotent installer that drops the workflow into `.github/workflows/` and appends the `.gitattributes` block.
+- `.github/workflows/pr-size.yml` and `.gitattributes` at the repo root — dogfooding the new gate on this repo's own PRs.
+
+### Changed
+
+- `skills/committing-changes/SKILL.md` — install step documents the new workflow installer; Rules add a one-line PR-size cap; Reference lists the new template + script files.
+
 ## [1.1.0] — 2026-04-28
 
 ### Added

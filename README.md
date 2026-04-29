@@ -8,7 +8,7 @@ Each skill is a self-contained folder with `SKILL.md` (frontmatter + body), opti
 
 See [INDEX.md](INDEX.md) for the full list. Two kinds:
 
-- **Workflow skills** — what to do (verbs): `running-tdd-cycles`, `reviewing-changes`, `designing-architecture`, `managing-github-issues`, `committing-changes`.
+- **Workflow skills** — what to do (verbs): `running-tdd-cycles`, `reviewing-changes`, `designing-architecture`, `managing-github-issues`, `committing-changes` (also installs an optional PR-size CI gate that fails PRs over 1000 changed lines, excluding tests/docs/lockfiles/generated).
 - **Rule skills** — conventions to apply (nouns): `python-conventions`, `go-conventions`, `solidity-conventions`, `shell-discipline`, `engineering-philosophy`.
 
 Workflow skills cross-reference rule skills; agents activate the rule skill alongside the workflow skill when the file or language matches.
