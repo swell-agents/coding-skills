@@ -1,7 +1,7 @@
 ---
 name: committing-changes
 description: Commit work with feature-branch + PR discipline and enforce commit-message rules via git hooks. Use when committing code, opening a PR, or setting up a new repo's commit hygiene. Installs three git hooks (commit-msg subject rules, pre-commit auto-checks, pre-push protect-main), creates a feature branch from main if needed, runs the project's lint/format/test before commit, generates a conformant commit message (capital start, ≤72 chars, no trailing period, no Co-Authored-By, one logical change per commit), pushes, opens a PR via gh pr create, and prunes merged branches. Never pushes to main, never merges PRs, never force-pushes. Co-activates with shell-discipline and engineering-philosophy.
-allowed-tools: Read, Edit, Write, Bash(git status *), Bash(git diff *), Bash(git log *), Bash(git add *), Bash(git commit *), Bash(git push *), Bash(git checkout *), Bash(git branch *), Bash(git merge *), Bash(git fetch *), Bash(git rev-parse *), Bash(gh pr *), Bash(gh repo *), Bash(bash scripts/install-hooks.sh)
+allowed-tools: Read, Edit, Write, Bash(git status *), Bash(git diff *), Bash(git log *), Bash(git add *), Bash(git commit *), Bash(git push *), Bash(git checkout *), Bash(git branch *), Bash(git merge *), Bash(git fetch *), Bash(git rev-parse *), Bash(gh pr *), Bash(gh repo *), Bash(bash scripts/install-hooks.sh), Bash(bash scripts/install-pr-size-workflow.sh)
 ---
 
 ## Workflow
@@ -12,6 +12,12 @@ allowed-tools: Read, Edit, Write, Bash(git status *), Bash(git diff *), Bash(git
    bash <skills>/committing-changes/scripts/install-hooks.sh
    ```
    This copies `commit-msg` and `pre-push` into `.git/hooks/` and makes them executable. Idempotent.
+
+   Then install the PR-size CI workflow:
+   ```
+   bash <skills>/committing-changes/scripts/install-pr-size-workflow.sh
+   ```
+   This drops `.github/workflows/pr-size.yml` and appends `.gitattributes` exclusions. Idempotent.
 
 2. **Branch check.** If on `main`, switch to a feature branch:
    ```
@@ -53,6 +59,7 @@ allowed-tools: Read, Edit, Write, Bash(git status *), Bash(git diff *), Bash(git
 - **Never merge branches or PRs.** Always let the user merge.
 - **Never force-push.** No `--force`, no `--force-with-lease`. Create new commits instead.
 - **One logical change per commit.**
+- **PR size**: ≤1000 changed lines per PR (excluding tests, docs, lockfiles, generated). Enforced by `.github/workflows/pr-size.yml`.
 - **Commit-message subject** (enforced by `commit-msg` hook):
   - Capital start (imperative mood: "Add", "Fix", "Refactor", not "added"/"adds").
   - ≤ 72 chars.
@@ -79,6 +86,9 @@ Each rule traces to a specific failure mode:
 - [scripts/pre-commit](scripts/pre-commit) — runs project's lint/format/test before commit.
 - [scripts/pre-push](scripts/pre-push) — blocks direct push to `main`/`master`.
 - [scripts/install-hooks.sh](scripts/install-hooks.sh) — idempotent installer.
+- [templates/pr-size.yml](templates/pr-size.yml) — GitHub Actions workflow that labels PR size and fails when >1000 changed lines (excluding tests, docs, lockfiles, generated).
+- [templates/gitattributes.example](templates/gitattributes.example) — `linguist-generated`/`linguist-vendored` entries appended to `.gitattributes` so GitHub collapses generated files in PR diffs.
+- [scripts/install-pr-size-workflow.sh](scripts/install-pr-size-workflow.sh) — idempotent installer for the workflow + `.gitattributes` block.
 - [reference/commit-md-original.md](reference/commit-md-original.md) — original Claude-Code `commit.md` command verbatim.
 - [reference/git-rule.md](reference/git-rule.md) — original `rules/git.md` verbatim.
 - [reference/hook-troubleshooting.md](reference/hook-troubleshooting.md) — common failure modes + fixes.
