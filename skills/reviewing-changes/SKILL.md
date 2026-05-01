@@ -61,7 +61,10 @@ See `reference/owasp-checklist.md` for the canonical mapping with attack-vector 
 - **Layer violations** — dependencies pointing the wrong way (e.g., domain importing infrastructure).
 - **Boundary erosion** — public methods sneaking into private packages; circular dependencies.
 - **Missing abstractions** — same logic implemented twice with minor variations.
-- **Custom code where a library exists** — flag reinvented validators, parsers, ORMs, retry logic, etc.
+- **Custom code where a library exists** — Critical when the diff reinvents primitives the ecosystem has already solved: cryptography, hashing, signatures, base-N encoding, protobuf/varint wire formats, multihash/multiaddr, JWT, JSON/YAML/TOML parsers, retry/backoff, rate limiters, ORMs, validators. Major for general utility code that has a battle-tested library equivalent.
+  - **Already-in-tree rule** — open `go.mod` / `package.json` / `pyproject.toml` / `Cargo.toml`. If a dependency that exports the function being hand-rolled is already in the lockfile, the hand-rolled version is presumptive Critical regardless of LoC. Don't import one symbol from a library and reinvent the others (e.g. don't call `peer.IDFromPublicKey` while hand-rolling `crypto.MarshalPrivateKey` from the same module).
+  - **Justification check** — comments that justify hand-rolling ("avoid coupling to internal representation", "keep the dep tree small", "minimise the binary measured into a TEE") must still hold for *this* diff. If the dep was added anyway, the original reason has expired and the hand-rolled code goes with it.
+  - **Greppable triggers** — search the diff for: custom `base58`/`base64`/`base32` encoders, raw protobuf field tags as constants (`0x08`, `0x12`, `0x18`, `0x22`), hand-written `varint` readers, custom `multihash`/`multiaddr` parsing, hand-rolled `pbkdf2`/`hkdf`/`argon2`, hand-written JWT verification, custom retry loops with exponential backoff. Each is a presumptive Critical until the diff justifies it.
 - **Pattern compliance** — clean architecture / DDD bounded contexts, only when the project documents a pattern.
 
 ## Output
