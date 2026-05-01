@@ -61,7 +61,10 @@ See `reference/owasp-checklist.md` for the canonical mapping with attack-vector 
 - **Layer violations** — dependencies pointing the wrong way (e.g., domain importing infrastructure).
 - **Boundary erosion** — public methods sneaking into private packages; circular dependencies.
 - **Missing abstractions** — same logic implemented twice with minor variations.
-- **Custom code where a library exists** — flag reinvented validators, parsers, ORMs, retry logic, etc.
+- **Custom code where a library exists** — presumptive Critical when the diff reinvents primitives the ecosystem already solves (cryptography, encoding, standard-format parsers, wire codecs, retry/rate-limiting, ORMs, validators). Major for general utility code with a battle-tested equivalent. Three sub-checks:
+  - **Already in tree** — if the project's lockfile already pulls in a library that exports the function being hand-rolled, the hand-rolled version is Critical regardless of LoC. Don't import one symbol and reinvent the others.
+  - **Justification still valid** — comments that justified hand-rolling earlier ("avoid coupling", "keep dep tree small", "minimise binary size") must still hold for *this* diff. Once the dep is in the tree, the original reason has expired.
+  - **What to grep for** — custom encoders for standard formats, raw wire-protocol bytes as constants, hand-rolled crypto primitives, hand-written auth-token verification, custom retry-with-backoff loops.
 - **Pattern compliance** — clean architecture / DDD bounded contexts, only when the project documents a pattern.
 
 ## Output
