@@ -10,11 +10,21 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
-## [1.3.1] — 2026-05-01
+## [1.3.2] — 2026-05-01
 
 ### Changed
 
 - `skills/reviewing-changes/SKILL.md` Pass 3 — strengthened the "library exists, don't reinvent" bullet. Reinventing primitives the ecosystem has already solved (cryptography, hashing, signatures, base-N encoding, protobuf/varint wire formats, multihash/multiaddr, JWT, JSON/YAML/TOML parsers, retry/backoff, rate limiters, ORMs, validators) is now presumptive Critical. Adds an "already-in-tree" rule (if the lockfile already pulls in a library that exports the function being hand-rolled, the hand-rolled version is presumptive Critical regardless of LoC), a justification check (stale "avoid coupling" / "small dep tree" comments expire when the dep is added anyway), and greppable triggers reviewers should grep for in every diff.
+
+## [1.3.1] — 2026-05-01
+
+### Removed
+
+- `skills/reviewing-changes/reference/code-reviewer-agent.md`, `security-auditor-agent.md`, `architect-review-agent.md` — verbatim copies of the original pre-migration Claude-Code subagents. They were no longer in the data flow (the live `agents/` shims supersede them, delegating to `SKILL.md` for procedure), and they still pointed at the obsolete `.claude/shared/rules/*.md` paths from the pre-migration claude-toolkit layout. ~200 lines of stale fork removed.
+
+### Changed
+
+- `skills/reviewing-changes/SKILL.md` Reference section — drops the three deleted reference files; adds a pointer to the live `agents/` shims as the parallel-execution surface.
 
 ## [1.3.0] — 2026-04-29
 
