@@ -10,6 +10,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.3.3] — 2026-05-01
+
+### Added
+
+- `skills/engineering-philosophy/SKILL.md` — new "Be Brief" principle. Imperative output, no preamble, no recap; compress response prose, never operational checklists (named rules, severity words, sub-checks, categories survive verbatim). Applies to chat replies, commit messages, PR bodies, review findings, and any other text the agent emits. Inspired by [Max Taylor's Caveman benchmark](https://www.maxtaylor.me/articles/i-benchmarked-caveman-against-two-words), which showed that two words ("Be brief") cut tokens 34% with no quality loss — and that flat compression *can* drop required terminology, hence the explicit "never compress checklists" carve-out. Since `engineering-philosophy` has `alwaysApply: true`, this principle propagates to every consumer of the plugin without per-skill edits.
+
 ## [1.3.2] — 2026-05-01
 
 ### Changed

@@ -1,6 +1,6 @@
 ---
 name: engineering-philosophy
-description: Apply core engineering principles to every code-related decision — KISS (simple over complex), YAGNI (only what's needed now), DRY (single source of truth, never copy-paste), OOP and SOLID (single responsibility first), no magic (explicit over implicit), small commits, prefer libraries over reinvention, no backwards-compatibility shims, automate quality checks in CI, investigate root causes instead of masking symptoms, and fail fast (assertions, strict validation, early returns). Use any time you write, edit, design, refactor, or review code, regardless of language — these principles are judgement weights for every coding task, not just architecture or review. Always co-activates with running-tdd-cycles, reviewing-changes, designing-architecture, committing-changes, and every per-language convention skill.
+description: Apply core engineering principles to every code-related decision — KISS (simple over complex), YAGNI (only what's needed now), DRY (single source of truth, never copy-paste), OOP and SOLID (single responsibility first), no magic (explicit over implicit), small commits, prefer libraries over reinvention, no backwards-compatibility shims, automate quality checks in CI, investigate root causes instead of masking symptoms, fail fast (assertions, strict validation, early returns), and be brief (imperative output, compress prose but never operational checklists). Use any time you write, edit, design, refactor, or review code, regardless of language — these principles are judgement weights for every coding task, not just architecture or review. Always co-activates with running-tdd-cycles, reviewing-changes, designing-architecture, committing-changes, and every per-language convention skill.
 alwaysApply: true
 ---
 
@@ -19,6 +19,7 @@ alwaysApply: true
 - **CI** — Automate all possible quality checks.
 - **Investigate, Don't Mask** — When a check fails or unexpected behaviour occurs, investigate the root cause instead of adding defensive code to mask the symptom.
 - **Fail Fast** — Detect and surface errors immediately at the point of failure. Use assertions, strict validation, and early returns.
+- **Be Brief** — Imperative output. No preamble, no recap, no restating the task back. Compress *response prose*, never *operational checklists*: keep every named rule, severity word, sub-check, and category from the active skill verbatim — cut the explanation around them, not the rule itself. Applies to chat replies, commit messages, PR bodies, review findings, and any other text the agent emits.
 
 ## Application
 
