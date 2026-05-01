@@ -107,8 +107,13 @@ For each individual finding:
 
 ## Reference
 
-- [reference/code-reviewer-agent.md](reference/code-reviewer-agent.md) — original Claude-Code code-reviewer agent verbatim (model: opus).
-- [reference/security-auditor-agent.md](reference/security-auditor-agent.md) — original Claude-Code security-auditor agent verbatim (model: opus).
-- [reference/architect-review-agent.md](reference/architect-review-agent.md) — original Claude-Code architect-review agent verbatim (model: opus).
 - [reference/owasp-checklist.md](reference/owasp-checklist.md) — canonical OWASP Top 10 mapping with attack vectors and fix patterns.
 - [reference/architecture-map-pattern.md](reference/architecture-map-pattern.md) — the optional `docs/architecture.md` convention this skill expects.
+
+The live subagent shims that wrap this skill for parallel execution live one level up:
+
+- `agents/code-reviewer.md` — Pass 1 (code quality)
+- `agents/security-auditor.md` — Pass 2 (security)
+- `agents/architect-review.md` — Pass 3 (architecture)
+
+Each is a thin shim that reads this `SKILL.md` and applies its scoped pass; the `/coding-skills:review` slash command spawns the three in parallel under `model: opus`.
