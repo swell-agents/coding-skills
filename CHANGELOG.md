@@ -14,7 +14,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Changed
 
-- `skills/reviewing-changes/SKILL.md` Pass 3 — strengthened the "library exists, don't reinvent" bullet. Reinventing primitives the ecosystem has already solved (cryptography, hashing, signatures, base-N encoding, protobuf/varint wire formats, multihash/multiaddr, JWT, JSON/YAML/TOML parsers, retry/backoff, rate limiters, ORMs, validators) is now presumptive Critical. Adds an "already-in-tree" rule (if the lockfile already pulls in a library that exports the function being hand-rolled, the hand-rolled version is presumptive Critical regardless of LoC), a justification check (stale "avoid coupling" / "small dep tree" comments expire when the dep is added anyway), and greppable triggers reviewers should grep for in every diff.
+- `skills/reviewing-changes/SKILL.md` Pass 3 — strengthened the "library exists, don't reinvent" bullet. Reinventing primitives the ecosystem already solves (crypto, encoding, parsers, wire codecs, retry/rate-limiting, ORMs, validators) is now presumptive Critical. Three sub-checks: "already in tree" (if the lockfile already pulls in a library that exports the function being hand-rolled, it's Critical regardless of LoC), "justification still valid" (stale comments that justified hand-rolling expire once the dep is in the tree), and "what to grep for" (custom encoders, raw wire-protocol bytes as constants, hand-rolled crypto, hand-written auth-token verification, custom retry-with-backoff loops). Stack-agnostic.
 
 ## [1.3.1] — 2026-05-01
 
