@@ -13,9 +13,8 @@ Acceptance is contract compliance, not technical quality. If the diff is ugly bu
 
 1. Read the linked issue (`gh issue view <N>`) — body + acceptance criteria + comment chain. If no link, fall back to the PR title + description.
 2. Read the diff (`git diff main...HEAD` or `gh pr diff <N>`).
-3. If a Test Designer artefact exists at `tests/issue-<N>/`, read it — treat it as a grounding anchor (the structured derivation of the spec).
-4. Compare scope along three axes — Coverage / Drift / Overreach — and emit a finding for every mismatch.
-5. Skip code quality, security, architecture. They belong to sibling agents.
+3. Compare scope along three axes — Coverage / Drift / Overreach — and emit a finding for every mismatch.
+4. Skip code quality, security, architecture. They belong to sibling agents.
 
 ## Output
 
