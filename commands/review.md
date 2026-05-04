@@ -14,19 +14,19 @@ Launch the four review agents **in parallel** — a single message with four Age
 3. `@architect-review` — Pass 3, architecture consistency
 4. `@acceptance-auditor` — Pass 4, intent / spec alignment (does the diff solve the linked issue?)
 
-Each agent returns a verdict line plus its findings. The first three return `PASS / NEEDS WORK / FAIL`; `acceptance-auditor` returns one or more of `SATISFIED / DRIFT / PARTIAL / OVERREACH / BLOCKED`.
+Each agent returns a verdict line (`PASS / NEEDS WORK / FAIL`) plus its findings.
 
 Aggregate the four reports into one Quality Gate Summary table:
 
 ```
 ## Quality Gate Summary
 
-| Review       | Verdict                | Critical | Major | Minor |
-|--------------|------------------------|----------|-------|-------|
-| Code         | pass/warn/fail         | N        | N     | N     |
-| Security     | pass/warn/fail         | N        | N     | N     |
-| Architecture | pass/warn/fail         | N        | N     | N     |
-| Acceptance   | satisfied/drift/...    | N        | N     | N     |
+| Review       | Verdict        | Critical | Major | Minor |
+|--------------|----------------|----------|-------|-------|
+| Code         | pass/warn/fail | N        | N     | N     |
+| Security     | pass/warn/fail | N        | N     | N     |
+| Architecture | pass/warn/fail | N        | N     | N     |
+| Acceptance   | pass/warn/fail | N        | N     | N     |
 
 **Overall**: PASS / NEEDS WORK / FAIL
 
@@ -34,7 +34,7 @@ Aggregate the four reports into one Quality Gate Summary table:
 1. <Critical/Major items, ordered>
 ```
 
-Map acceptance to overall: `SATISFIED` → pass; `DRIFT / PARTIAL / OVERREACH / BLOCKED` each block merge until resolved (overall = NEEDS WORK or FAIL). Then list every Critical and Major finding from all four passes with `Rule / Severity / Location / Issue / Fix`. Skip Minor unless the overall verdict is PASS (then include them as polish).
+Then list every Critical and Major finding from all four passes with `Rule / Severity / Location / Issue / Fix`. Skip Minor unless the overall verdict is PASS (then include them as polish).
 
 ## When to use the inline skill instead
 
