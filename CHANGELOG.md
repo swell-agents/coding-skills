@@ -10,6 +10,17 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.4.0] — 2026-05-08
+
+### Added
+
+- `agents/acceptance-auditor.md` — fourth parallel-review agent (model: opus). Verifies that a diff actually solves the contract along three axes (Drift / Partial / Overreach), emitting `Blocked` when no contract is resolvable. Contract resolution chain: linked GitHub issue (`gh issue view`) → PR description (`gh pr view`) → **Spec Kit fallback** for `.specify/` projects (discovers the active feature via `Glob specs/*/tasks.md`, picks by branch-name `<NNN>` prefix or highest `<NNN>`, resolves the relevant `#### Block <X> — <name>` from explicit prompt context, branch pattern `<NNN>-block-<letter>-...`, `[Spec Kit] Implement Block <X>` commit subjects, or touched-file overlap).
+- `commands/review.md` — description and orchestration bumped to four-pass; `/coding-skills:review` now launches four agents in parallel and aggregates an "Acceptance" column into the Quality Gate Summary table.
+
+### Changed
+
+- `.claude-plugin/plugin.json` — version 1.3.3 → 1.4.0; description names the new fourth agent.
+
 ## [1.3.3] — 2026-05-01
 
 ### Added
