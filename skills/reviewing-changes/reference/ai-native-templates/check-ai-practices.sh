@@ -1,9 +1,7 @@
-# ai-native-reviewer-template-sha256: 1525d7d50788740280ed90e2d3776e59973c955f5eb932a62be6116cca53e0c0
 #!/usr/bin/env bash
 #
 # Mechanical AI-native-coding checks. Deterministic, cheap, project-agnostic.
 # Source rubric: ${CLAUDE_PLUGIN_ROOT}/skills/reviewing-changes/reference/ai-native-rubric.md
-# SHA in the first line is auto-stamped by scripts/sync-ai-native-rubric.sh in the plugin repo.
 #
 # Three checks only. Everything else is judgement-pass for the ai-native-reviewer agent.
 #

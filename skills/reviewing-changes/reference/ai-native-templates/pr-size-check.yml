@@ -1,11 +1,8 @@
-# ai-native-reviewer-template-sha256: 0a53196a5e06e09c991f753b0d4400c8fc7041ec139ddc9313947082252515cf
-#
 # Standalone PR-size gate. Fails the PR if the diff exceeds AI_PRACTICES_DIFF_LIMIT (default 1000)
 # unless the PR has the AI_PRACTICES_LARGE_PR_LABEL label (default 'large-pr-ok').
 #
 # Use this in addition to ai-practices.yml when you want PR size as a separate, faster gate.
 # Source: coding-skills plugin > skills/reviewing-changes/reference/ai-native-templates/
-# SHA in the first line is auto-stamped by scripts/sync-ai-native-rubric.sh in the plugin repo.
 #
 # Empirical basis: Fowler 'keep changes small' / Larridin AI-native-engineering-team —
 # small reversible commits keep verification feasible at agent throughput.

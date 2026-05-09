@@ -80,8 +80,8 @@ A small subset of this rubric is deterministic and cheap: it should not depend o
 - `ai-practices.yml` — GitHub Action wrapping `check-ai-practices.sh` on PR.
 - `pr-size-check.yml` — GitHub Action that fails the PR if the diff exceeds 1000 lines without a `large-pr-ok` label override [R5].
 
-Templates have a SHA-stamped first line (`# ai-native-reviewer-template-sha256: <hash>`). Agent compares plugin SHA to project copy SHA.
+Agent verifies template installation by comparing the plugin's reference copy to the project's installed copy via `Read` + content diff.
 
 - Templates not installed → Minor per missing template (concrete fix: copy command).
-- Template installed but SHA mismatch with plugin version → Minor (project may have legitimately customised; do not auto-fail).
+- Template installed but content differs from plugin reference → Minor (project may have legitimately customised; do not auto-fail).
 - Everything in this rubric outside of the three checks above is judgement-pass for the agent. Do not mechanise rules whose application is contextual.
