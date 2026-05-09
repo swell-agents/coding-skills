@@ -10,6 +10,22 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.5.0] — 2026-05-09
+
+### Added
+
+- `agents/ai-native-reviewer.md` — fifth parallel-review agent (model: opus). Validates a diff and the surrounding project against the empirical rubric for working with AI coding agents (R1..R8): comments WHY-not-WHAT, instruction-file presence + single-source-of-truth (R2.1), tests prefer real objects over mocks, ADRs for vibe-architecting decisions, PR / review hygiene, conversational interaction patterns, logging conventions, and bundled CI templates. Read-only — same toolset shape as sibling reviewers.
+- `skills/reviewing-changes/reference/ai-native-rubric.md` — eight rules R1..R8 (with R2.1 sub-rule) grounded in published empirical work; each rule cites the underlying paper(s) (vitale2026impact, lulla2026impact, hora2026are, konrad2026architecture, watanabe2025use, agarwal2026ai, tang2026programming, ouatiti2026do, galster2026configuring, ma2026zoro, …).
+- `skills/reviewing-changes/reference/ai-native-templates/check-ai-practices.sh` — three deterministic mechanical checks (instruction-file presence, mock-framework pre-screen, PR diff size). Project-agnostic.
+- `skills/reviewing-changes/reference/ai-native-templates/ai-practices.yml` — GitHub Action wrapping `check-ai-practices.sh`.
+- `skills/reviewing-changes/reference/ai-native-templates/pr-size-check.yml` — standalone PR-size gate (default 1000 lines, override via `large-pr-ok` label).
+
+### Changed
+
+- `commands/review.md` — `/coding-skills:review` now spawns five agents in parallel (was four); aggregate Quality Gate Summary table gains an "AI-Native Practices" row.
+- `skills/reviewing-changes/SKILL.md` — Pass 4 (Acceptance) and Pass 5 (AI-Native Practices) documented; live-shim registry expanded from three to five.
+- `.claude-plugin/plugin.json` — version 1.4.0 → 1.5.0; description names the new fifth agent.
+
 ## [1.4.0] — 2026-05-08
 
 ### Added
