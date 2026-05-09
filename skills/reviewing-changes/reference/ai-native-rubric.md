@@ -20,6 +20,17 @@ Empirical: AGENTS.md cuts agent runtime −28.64% and output tokens −16.58% [l
 - Every workflow / Make-target / file referenced in the instruction file must actually exist.
 - Static rules decay mid-session [ma2026zoro] — AGENTS.md should include a re-anchor trigger ("Before each new subtask, re-verify constraints") for long sessions.
 
+### R2.1 — Single source of truth across instruction files
+
+When multiple instruction files coexist (AGENTS.md + CLAUDE.md + .cursor/rules/), one is canonical and the others are either thin pointers (`See @AGENTS.md` / `@AGENTS.md`) or hold only tool-specific extensions (e.g., a CLAUDE.md section listing `/coding-skills:*` slash commands that other tools won't honor). Recommended canonical: **AGENTS.md** — emerging interoperable standard across Codex, Claude Code, Copilot, Cursor, Gemini per [galster2026configuring]; Cursor has explicitly deprecated `.cursorrules` in favor of AGENTS.md.
+
+Duplicating substantive content (build commands, conventions, architecture summaries) across multiple files = **Major**. Drift between copies produces contradictory documentation, which is the CodeCrash failure mode (23% reasoning collapse from misleading inline guidance) at the manifest layer. Detection: any non-pointer file ≥10 lines that overlaps with the canonical file's content beyond a thin tool-specific delta.
+
+Acceptable patterns:
+- One canonical file (AGENTS.md), no others — simplest.
+- AGENTS.md canonical + CLAUDE.md as one-line pointer (`@AGENTS.md`) for harnesses that auto-load only `CLAUDE.md`.
+- AGENTS.md canonical + tool-specific extensions in CLAUDE.md / `.cursor/rules/*.mdc` containing only what the canonical file cannot express (slash commands, IDE-rule glob scopes).
+
 ## Rule R3 — Tests prefer real objects over mocks
 
 Empirical: agents generate mocks in 36% of test commits vs 26% for humans [hora2026are]. Mocked tests are easier for agents to produce but provide weaker correctness guarantees.
