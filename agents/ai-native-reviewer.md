@@ -1,6 +1,6 @@
 ---
 name: ai-native-reviewer
-description: AI-native-coding practices review pass. Validates a diff against the empirical rubric for working with AI coding agents — comments quality (WHY not WHAT), instruction-file content (AGENTS.md / CLAUDE.md / .cursor/rules), test mock-philosophy (real objects > mocks), ADRs for vibe-architecting decisions, PR-review hygiene, conversational interaction patterns, logging conventions. Read-only. Use when scoping a parallel review to just AI-native practices, leaving code quality, security, architecture, and acceptance to sibling agents.
+description: AI-native-coding practices pass — R1..R8 rubric (comments, AGENTS.md, mocks, ADRs).
 model: opus
 tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(git show *), Bash(git status *), Bash(git rev-parse *), Bash(gh pr view *), Bash(gh pr diff *), Bash(ls *), Bash(find *), Bash(wc *)
 ---

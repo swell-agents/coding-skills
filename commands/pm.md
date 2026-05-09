@@ -1,5 +1,5 @@
 ---
-description: Drive spec-driven project management via GitHub Issues. Wraps the managing-github-issues skill — decomposes a feature into dependency-linked task issues, picks up the next ready task, closes a batch when done, or shows a status dashboard depending on $ARGUMENTS.
+description: PM via GitHub issues (plan / start / next / advance / status / create-issues).
 allowed-tools: Bash(gh issue *), Bash(gh label *), Bash(gh pr *), Bash(git checkout -b *), Bash(git status *), Read
 ---
 

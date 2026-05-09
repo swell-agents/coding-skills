@@ -1,6 +1,6 @@
 ---
 name: go-conventions
-description: Apply Go project conventions — Go 1.25.x toolchain pinned via toolchain directive and GOTOOLCHAIN=local, vendored deps via go mod vendor, golangci-lint v2 strict (~50 enabled linters), gofmt + goimports, gosec + semgrep + govulncheck + CodeQL static analysis, race-detector + fuzz-capable testing, reproducible-build flags (-trimpath, -buildid=) for TEE-attested binaries, cmd/ + internal/ + pkg/ layout, stdlib-first dependencies (log/slog, net/http, google/uuid, google.golang.org/protobuf). Use when starting a Go project, writing or reviewing Go code, configuring Go tooling, doing TEE-attested or reproducible builds, or evaluating compliance with these defaults. Co-activates with running-tdd-cycles, reviewing-changes, and engineering-philosophy.
+description: Apply Go conventions — 1.25.x, vendored, golangci-lint v2, race-detector tests.
 allowed-tools: Read, Edit, Write, Grep, Glob, Bash(go *), Bash(golangci-lint *), Bash(gofmt *), Bash(goimports *), Bash(gosec *), Bash(govulncheck *), Bash(semgrep *), Bash(make *)
 globs: "**/*.go"
 paths: "**/*.go"
@@ -114,3 +114,7 @@ build-reproducible   build twice, diff sha256sum, fail on mismatch
 vuln                 govulncheck ./...
 all                  vendor tidy fmt-check lint test build
 ```
+
+## Reference
+
+- [reference/golangci.yaml.example](reference/golangci.yaml.example) — copy-paste starter for the strict golangci-lint v2 config described above.

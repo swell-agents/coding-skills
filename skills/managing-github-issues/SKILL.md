@@ -1,6 +1,6 @@
 ---
 name: managing-github-issues
-description: Drive spec-driven project management via GitHub Issues — decompose a feature into dependency-linked task issues, label them ready / blocked / epic / in-progress, track progress, unblock downstream tasks as upstream ones close. Use when planning a new feature with multiple tasks, creating issues from a plan, picking up a ready task, checking what's ready to work on, closing a batch, or asking for project status. Each task is sized for one TDD cycle and links to blockers via "Blocked by: #N" lines. Tool access is scoped to gh issue / gh label / gh pr / git checkout-branch only — no force-push, no gh repo deletions, never closes a PR or merges on the user's behalf. Echoes any state-changing gh command back to the user before running it. Composes with designing-architecture (produces the plan), running-tdd-cycles (executes one task), committing-changes (closes a task with a PR).
+description: Decompose features into dependency-linked GitHub issues; track and unblock progress.
 allowed-tools: Read, Write, Edit, Bash(gh issue *), Bash(gh label *), Bash(gh repo view *), Bash(gh pr *), Bash(git checkout *), Bash(git branch *), Bash(git status *), Bash(bash scripts/*)
 ---
 

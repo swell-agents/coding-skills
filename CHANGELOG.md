@@ -10,6 +10,24 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.6.0] — 2026-05-09
+
+### Changed
+
+- All ten `skills/*/SKILL.md` `description:` fields compressed from ~600–1020 chars to ~75–84 chars (one short imperative sentence each). Same change applied to the four review agents whose descriptions were inflated by the "four/five-pass review" preamble. Rationale: every skill's name+description is loaded into every session prompt, so long descriptions bloat context, dilute the trigger signal, and bias retrieval toward the most verbose skill regardless of fit. Body content (activation conditions, co-activation graph, tool rationale) is unchanged — those details belong below the frontmatter, not in it.
+- `CONTRIBUTING.md` — frontmatter rule updated from `≤1024 chars` to `~80 chars` with a hard cap of 120, plus do/don't examples and a "what belongs in description vs body" table.
+- `tests/frontmatter-validate.sh` — added a `WARN` for any description over 120 chars (the 1024-char hard fail still applies).
+- `skills/reviewing-changes/SKILL.md` — fixed Pass-numbering bug introduced in 1.4.0/1.5.0 (Pass 4 and Pass 5 had been inserted between Pass 2 and Pass 3, leaving Pass 3 last). Body order is now Pass 1 → Pass 2 → Pass 3 → Pass 4 → Pass 5; intro updated from "three passes" to "five passes".
+- `agents/code-reviewer.md`, `agents/security-auditor.md`, `agents/architect-review.md`, `agents/acceptance-auditor.md` — prose updated from "four sibling reviewers" / "three sibling verdicts" / "four-pass review" to the five-sibling reality (ai-native-reviewer was added in 1.5.0 but its sibling references were not back-propagated). The "Skip Pass X" lists now name all four other passes.
+- `commands/review.md` — fallback-mode prose updated from "the same four passes" to "the same five passes".
+- `skills/shell-discipline/SKILL.md` — removed empty `allowed-tools:` field (the skill is purely advisory and invokes no tools).
+- `.claude-plugin/plugin.json` — version 1.5.0 → 1.6.0; description compressed to match the new rule.
+
+### Added
+
+- `CLAUDE.md` at the repo root — repo-local instruction file pointing to the description rule, validation step, and existing memory entries.
+- `skills/go-conventions/SKILL.md` — added a `## Reference` section pointing at `reference/golangci.yaml.example`, which had been shipping but never linked from the skill body.
+
 ## [1.5.0] — 2026-05-09
 
 ### Added

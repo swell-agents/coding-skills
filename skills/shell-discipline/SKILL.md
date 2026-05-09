@@ -1,7 +1,6 @@
 ---
 name: shell-discipline
-description: Apply shell-command discipline for agent invocations — one command per call (no &&, ;, or inline cd dir && cmd chains), no inline env vars (VAR=value cmd), and gh auth login or gh auth switch for GitHub auth (never prefix with GH_TOKEN=...). Use when invoking Bash commands as part of an agent workflow, writing shell snippets in a procedure, or reviewing how an agent issues shell commands. Prerequisites: a POSIX shell (bash or zsh); for the GitHub-auth rule the gh CLI must be installed and authenticated. Failure modes covered: gh auth login fails (re-run interactively, then gh auth status to verify), commands that need elevated privileges (set up the privilege separately rather than prefixing with sudo inline). Improves readability, atomicity, and permission auditability since each command becomes one auditable tool call instead of an opaque chain. Composes with every workflow skill that issues shell commands.
-allowed-tools:
+description: Shell discipline — one command per call, no inline env vars, gh auth login.
 ---
 
 ## Shell Commands

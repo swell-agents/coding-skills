@@ -1,5 +1,5 @@
 ---
-description: Commit work with feature-branch + PR discipline. Wraps the committing-changes skill — installs commit-msg/pre-commit/pre-push hooks if missing, branches off main if on a protected branch, runs the project's lint/format/test, generates a conformant commit message, pushes, and opens a PR via gh pr create.
+description: Commit + PR via committing-changes skill (hooks, lint, gh pr create).
 allowed-tools: Bash(git *), Bash(gh pr *), Bash(gh auth status), Read
 ---
 

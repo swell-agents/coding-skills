@@ -1,5 +1,5 @@
 ---
-description: Five-pass quality gate review (code quality + security + architecture + acceptance + AI-native practices). Launches the code-reviewer, security-auditor, architect-review, acceptance-auditor, and ai-native-reviewer agents in parallel for opus-pinned, isolated-context review, then aggregates their findings. Use when you want the full parallel review flow before opening or merging a PR.
+description: Five-pass quality gate (code, security, architecture, acceptance, AI-native).
 allowed-tools: Bash(git diff *), Bash(git log *), Bash(git rev-parse *), Bash(gh pr view *), Bash(gh pr diff *), Bash(gh issue view *)
 ---
 
@@ -40,4 +40,4 @@ Then list every Critical and Major finding from all five passes with `Rule / Sev
 
 ## When to use the inline skill instead
 
-If parallel agents are unavailable in the current harness, fall back to invoking the `reviewing-changes` skill directly — it runs the same four passes in a single inline pass. The trade-off is no parallelism and no model-pinning, but the procedure is identical.
+If parallel agents are unavailable in the current harness, fall back to invoking the `reviewing-changes` skill directly — it runs the same five passes in a single inline pass. The trade-off is no parallelism and no model-pinning, but the procedure is identical.
