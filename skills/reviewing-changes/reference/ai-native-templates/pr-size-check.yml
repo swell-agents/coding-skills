@@ -1,0 +1,52 @@
+# Standalone PR-size gate. Fails the PR if the diff exceeds AI_PRACTICES_DIFF_LIMIT (default 1000)
+# unless the PR has the AI_PRACTICES_LARGE_PR_LABEL label (default 'large-pr-ok').
+#
+# Use this in addition to ai-practices.yml when you want PR size as a separate, faster gate.
+# Source: coding-skills plugin > skills/reviewing-changes/reference/ai-native-templates/
+#
+# Empirical basis: Fowler 'keep changes small' / Larridin AI-native-engineering-team —
+# small reversible commits keep verification feasible at agent throughput.
+#
+name: pr-size-check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compute diff size
+        id: size
+        env:
+          BASE: ${{ github.event.pull_request.base.ref }}
+        run: |
+          git fetch origin "$BASE" --depth=1
+          lines="$(git diff --shortstat "origin/$BASE...HEAD" | grep -oE '[0-9]+ insertion|[0-9]+ deletion' | grep -oE '[0-9]+' | awk '{s+=$1} END {print s+0}')"
+          echo "lines=$lines" >> "$GITHUB_OUTPUT"
+          echo "PR diff: $lines lines"
+      - name: Enforce limit
+        env:
+          LINES: ${{ steps.size.outputs.lines }}
+          LIMIT: ${{ vars.AI_PRACTICES_DIFF_LIMIT || '1000' }}
+          LARGE_LABEL: ${{ vars.AI_PRACTICES_LARGE_PR_LABEL || 'large-pr-ok' }}
+          LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: |
+          if [[ "$LINES" -le "$LIMIT" ]]; then
+            echo "OK: $LINES <= $LIMIT"
+            exit 0
+          fi
+          if [[ ",$LABELS," == *",$LARGE_LABEL,"* ]]; then
+            echo "OK: $LINES > $LIMIT but label '$LARGE_LABEL' is set"
+            exit 0
+          fi
+          echo "FAIL: PR diff $LINES lines exceeds $LIMIT. Decompose into smaller commits or apply '$LARGE_LABEL' label."
+          exit 1

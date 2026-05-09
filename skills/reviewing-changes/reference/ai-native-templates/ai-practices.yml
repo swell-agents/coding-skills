@@ -1,0 +1,25 @@
+# AI-native-coding mechanical checks. Wraps check-ai-practices.sh.
+# Source: coding-skills plugin > skills/reviewing-changes/reference/ai-native-templates/
+#
+name: ai-practices
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  ai-practices:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run mechanical AI-practices checks
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.ref }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: bash scripts/check-ai-practices.sh
