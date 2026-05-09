@@ -1,5 +1,5 @@
 ---
-description: Four-pass quality gate review (code quality + security + architecture + acceptance). Launches the code-reviewer, security-auditor, architect-review, and acceptance-auditor agents in parallel for opus-pinned, isolated-context review, then aggregates their findings. Use when you want the full parallel review flow before opening or merging a PR.
+description: Five-pass quality gate review (code quality + security + architecture + acceptance + AI-native practices). Launches the code-reviewer, security-auditor, architect-review, acceptance-auditor, and ai-native-reviewer agents in parallel for opus-pinned, isolated-context review, then aggregates their findings. Use when you want the full parallel review flow before opening or merging a PR.
 allowed-tools: Bash(git diff *), Bash(git log *), Bash(git rev-parse *), Bash(gh pr view *), Bash(gh pr diff *), Bash(gh issue view *)
 ---
 
@@ -7,26 +7,28 @@ Scope: $ARGUMENTS
 
 If `$ARGUMENTS` is empty, default the scope to `git diff main...HEAD`. If it looks like a PR number, resolve it via `gh pr diff <N>`. Otherwise pass it through verbatim as the diff range.
 
-Launch the four review agents **in parallel** — a single message with four Agent tool calls:
+Launch the five review agents **in parallel** — a single message with five Agent tool calls:
 
 1. `@code-reviewer` — Pass 1, code quality
 2. `@security-auditor` — Pass 2, security audit
 3. `@architect-review` — Pass 3, architecture consistency
 4. `@acceptance-auditor` — Pass 4, intent / spec alignment (does the diff solve the linked issue?)
+5. `@ai-native-reviewer` — Pass 5, AI-native-coding practices (rubric R1..R8 in `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-changes/reference/ai-native-rubric.md`)
 
 Each agent returns a verdict line (`PASS / NEEDS WORK / FAIL`) plus its findings.
 
-Aggregate the four reports into one Quality Gate Summary table:
+Aggregate the five reports into one Quality Gate Summary table:
 
 ```
 ## Quality Gate Summary
 
-| Review       | Verdict        | Critical | Major | Minor |
-|--------------|----------------|----------|-------|-------|
-| Code         | pass/warn/fail | N        | N     | N     |
-| Security     | pass/warn/fail | N        | N     | N     |
-| Architecture | pass/warn/fail | N        | N     | N     |
-| Acceptance   | pass/warn/fail | N        | N     | N     |
+| Review             | Verdict        | Critical | Major | Minor |
+|--------------------|----------------|----------|-------|-------|
+| Code               | pass/warn/fail | N        | N     | N     |
+| Security           | pass/warn/fail | N        | N     | N     |
+| Architecture       | pass/warn/fail | N        | N     | N     |
+| Acceptance         | pass/warn/fail | N        | N     | N     |
+| AI-Native Practices| pass/warn/fail | N        | N     | N     |
 
 **Overall**: PASS / NEEDS WORK / FAIL
 
@@ -34,7 +36,7 @@ Aggregate the four reports into one Quality Gate Summary table:
 1. <Critical/Major items, ordered>
 ```
 
-Then list every Critical and Major finding from all four passes with `Rule / Severity / Location / Issue / Fix`. Skip Minor unless the overall verdict is PASS (then include them as polish).
+Then list every Critical and Major finding from all five passes with `Rule / Severity / Location / Issue / Fix`. Skip Minor unless the overall verdict is PASS (then include them as polish).
 
 ## When to use the inline skill instead
 

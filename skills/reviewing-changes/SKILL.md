@@ -55,7 +55,32 @@ Check, in order, against OWASP Top 10:
 
 See `reference/owasp-checklist.md` for the canonical mapping with attack-vector notes.
 
-### 5. Pass 3 — Architecture consistency
+### Pass 4 — Acceptance / intent alignment
+
+Does the diff actually solve the contract — linked GitHub issue, PR description, or active Spec Kit `specs/<NNN>-<feature>/tasks.md` Block? Cover the three axes:
+
+- **Drift** — diff implements something related but not the asked feature.
+- **Partial** — diff covers some required behaviours but misses others.
+- **Overreach** — diff includes changes the issue did not request.
+
+See `agents/acceptance-auditor.md` for the full procedure.
+
+### Pass 5 — AI-Native-Coding Practices
+
+Validates the diff and the surrounding project against the empirically-grounded rubric for working with AI coding agents. Eight rules, citation-grounded:
+
+- **R1** — Comments WHY not WHAT (load-bearing for LLM coding; inaccurate comments harmful).
+- **R2** — Durable agent context belongs in instruction files (AGENTS.md / CLAUDE.md / .cursor/rules).
+- **R3** — Tests prefer real objects over mocks; mock only at I/O boundaries.
+- **R4** — Architectural decisions need ADRs (counter "vibe architecting").
+- **R5** — Code review and PR hygiene survive AI throughput (small commits, decomposed PRs).
+- **R6** — Conversational interaction is iterative, not one-shot.
+- **R7** — Logging conventions must be explicit in instruction files.
+- **R8** — Mechanical-rubric subset belongs in CI; bundled templates ship with the plugin.
+
+The rubric, with citations, lives at `reference/ai-native-rubric.md`. The mechanical-check templates ship at `reference/ai-native-templates/`. See `agents/ai-native-reviewer.md` for the full procedure.
+
+### Pass 3 — Architecture consistency
 
 - **Architecture map** — does the diff respect the `docs/architecture.md` (or equivalent) responsibility split? See `reference/architecture-map-pattern.md`.
 - **Layer violations** — dependencies pointing the wrong way (e.g., domain importing infrastructure).
@@ -72,11 +97,13 @@ See `reference/owasp-checklist.md` for the canonical mapping with attack-vector 
 ```
 ## Quality Gate Summary
 
-| Review       | Verdict        | Critical | Major | Minor |
-|--------------|----------------|----------|-------|-------|
-| Code         | pass/warn/fail | N        | N     | N     |
-| Security     | pass/warn/fail | N        | N     | N     |
-| Architecture | pass/warn/fail | N        | N     | N     |
+| Review              | Verdict        | Critical | Major | Minor |
+|---------------------|----------------|----------|-------|-------|
+| Code                | pass/warn/fail | N        | N     | N     |
+| Security            | pass/warn/fail | N        | N     | N     |
+| Architecture        | pass/warn/fail | N        | N     | N     |
+| Acceptance          | pass/warn/fail | N        | N     | N     |
+| AI-Native Practices | pass/warn/fail | N        | N     | N     |
 
 **Overall**: PASS / NEEDS WORK / FAIL
 
@@ -118,5 +145,7 @@ The live subagent shims that wrap this skill for parallel execution live one lev
 - `agents/code-reviewer.md` — Pass 1 (code quality)
 - `agents/security-auditor.md` — Pass 2 (security)
 - `agents/architect-review.md` — Pass 3 (architecture)
+- `agents/acceptance-auditor.md` — Pass 4 (acceptance / intent)
+- `agents/ai-native-reviewer.md` — Pass 5 (AI-native-coding practices)
 
-Each is a thin shim that reads this `SKILL.md` and applies its scoped pass; the `/coding-skills:review` slash command spawns the three in parallel under `model: opus`.
+Each is a thin shim that reads this `SKILL.md` (and, for Pass 5, also `reference/ai-native-rubric.md`) and applies its scoped pass; the `/coding-skills:review` slash command spawns the five in parallel under `model: opus`.
