@@ -1,6 +1,6 @@
 # AI-Native Coding Rubric
 
-> Compact rubric for the `ai-native-reviewer` agent. Source of truth: `cto-agent/compilations/ai-coding-best-practices.md`. Sync via `scripts/sync-rubric.sh`. Each rule is grounded in published empirical work; citation keys live in the cto-agent `papers` collection.
+> Compact rubric for the `ai-native-reviewer` agent. Each rule is grounded in published empirical work on AI-native coding; citation keys (e.g. `[vitale2026impact]`) point to the underlying papers — search arXiv or Google Scholar by key. The rubric is maintained manually; updates reach the agent via the next plugin release.
 
 ## Rule R1 — Comments must convey WHY, not WHAT
 

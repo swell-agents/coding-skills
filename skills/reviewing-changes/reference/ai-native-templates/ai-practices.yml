@@ -1,8 +1,8 @@
-# ai-native-reviewer-template-sha256: b0afbe8d13bb18fc17ddd7b829b0e59f1c0ef888ec2a6b1a7334d4579df983f3
+# ai-native-reviewer-template-sha256: b271809405313a80936255ba31d5499abe1b21396127c2c38f7f9f36790cf48b
 #
 # AI-native-coding mechanical checks. Wraps check-ai-practices.sh.
 # Source: coding-skills plugin > skills/reviewing-changes/reference/ai-native-templates/
-# Sync via: scripts/sync-ai-native-rubric.sh (stamps SHA + freshness)
+# SHA in the first line is auto-stamped by scripts/sync-ai-native-rubric.sh in the plugin repo.
 #
 name: ai-practices
 
