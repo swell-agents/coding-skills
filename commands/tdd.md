@@ -1,5 +1,5 @@
 ---
-description: Drive a full red-green-refactor TDD cycle for the requirement in $ARGUMENTS. Wraps the running-tdd-cycles skill — writes a failing test first, makes it pass with minimal code, then refactors with the test as a safety net. Supports Python (pytest), JS/TS (Jest/Vitest), Go (testing/T), Java (JUnit), Ruby (RSpec), Rust (cargo test), Solidity (forge).
+description: Run a red-green-refactor TDD cycle on $ARGUMENTS (any supported language).
 allowed-tools: Read, Edit, Write, Glob, Grep, Bash(uv *), Bash(npm *), Bash(pnpm *), Bash(yarn *), Bash(go test *), Bash(go build *), Bash(forge test *), Bash(forge build *), Bash(cargo test *), Bash(pytest *), Bash(git status *), Bash(git diff *)
 ---
 

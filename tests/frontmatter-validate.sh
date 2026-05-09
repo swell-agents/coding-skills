@@ -47,6 +47,8 @@ for skill_dir in "$SKILLS_DIR"/*/; do
         err "$skill" "missing description field"
     elif [[ ${#desc} -gt 1024 ]]; then
         err "$skill" "description too long (${#desc} > 1024)"
+    elif [[ ${#desc} -gt 120 ]]; then
+        warn "$skill" "description is ${#desc} chars (target ~80, hard cap 120)"
     fi
 
     if echo "$fm" | grep -q '^model:'; then

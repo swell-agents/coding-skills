@@ -1,6 +1,6 @@
 ---
 name: running-tdd-cycles
-description: Drive strict red-green-refactor TDD discipline for any code change. Use when a user requests test-driven development, asks to write a failing test first, wants to add a feature one requirement at a time, or invokes a phase like red, green, or refactor. Coordinates failing-test generation, minimal implementation, and refactor-with-safety-net for Python (pytest), JS/TS (Jest/Vitest), Go (testing/T), Java (JUnit), Ruby (RSpec), Rust (cargo test), and Solidity (forge). Enforces test-first ordering, fails-for-the-right-reason verification, and refactor-only-when-green gating. Composes with python-conventions, go-conventions, solidity-conventions, and engineering-philosophy.
+description: Drive strict red-green-refactor TDD discipline on any code change, any language.
 allowed-tools: Read, Edit, Write, Grep, Glob, Bash(pytest *), Bash(uv run pytest *), Bash(npm test *), Bash(npm run test *), Bash(npx vitest *), Bash(npx jest *), Bash(go test *), Bash(cargo test *), Bash(rspec *), Bash(mvn test *), Bash(gradle test *), Bash(forge test *), Bash(forge coverage *), Bash(git status *), Bash(git diff *), Bash(git add *), Bash(git commit *)
 ---
 

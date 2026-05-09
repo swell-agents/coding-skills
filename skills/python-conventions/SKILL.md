@@ -1,6 +1,6 @@
 ---
 name: python-conventions
-description: Apply Python project conventions — uv for deps and builds, Ruff strict (E, F, I, UP, B, SIM, PTH, PIE, RUF, T201, PLC0415), mypy strict, pytest with pytest-cov and pytest-asyncio, vulture for dead code, pip-audit for dependency security, and a gitignored test.py for scratch experiments. Use when starting a Python project, writing or reviewing Python code, configuring Python tooling, or evaluating compliance with these defaults. Co-activates with running-tdd-cycles, reviewing-changes, and engineering-philosophy.
+description: Apply Python conventions — uv, Ruff strict, mypy strict, pytest, pip-audit.
 allowed-tools: Read, Edit, Write, Grep, Glob, Bash(uv *), Bash(uv run ruff *), Bash(uv run mypy *), Bash(uv run pytest *), Bash(uv run pip-audit *), Bash(uv run vulture *), Bash(uv run python *)
 globs: "**/*.py"
 paths: "**/*.py"

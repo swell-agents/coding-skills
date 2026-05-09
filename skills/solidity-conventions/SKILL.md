@@ -1,6 +1,6 @@
 ---
 name: solidity-conventions
-description: Apply Solidity project conventions — Foundry only (forge, cast, anvil, chisel; no Hardhat or Truffle), forge fmt with sort_imports, solhint:all strict (--max-warnings=0 --noPoster) extending compiler-version ^0.8.22, fuzz tests via Foundry's built-in fuzzing, invariant tests via forge-std/StdInvariant.sol with handlers, gas snapshots via forge snapshot, coverage via forge coverage --report lcov, and script/Scratch.s.sol or chisel for scratch (never inline forge script heredocs). Use when starting a Solidity project, writing or reviewing Solidity contracts and tests, configuring Foundry or solhint, or evaluating compliance with these defaults. Co-activates with running-tdd-cycles, reviewing-changes, and engineering-philosophy.
+description: Apply Solidity conventions — Foundry only, forge fmt, solhint:all, fuzz tests.
 allowed-tools: Read, Edit, Write, Grep, Glob, Bash(forge *), Bash(cast *), Bash(anvil *), Bash(chisel *), Bash(solhint *), Bash(yarn lint:*), Bash(npm run lint:*)
 globs: "**/*.sol"
 paths: "**/*.sol"

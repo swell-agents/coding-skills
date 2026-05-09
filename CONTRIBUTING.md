@@ -19,7 +19,7 @@ purpose: How to add or modify a skill in this repo
 ```yaml
 ---
 name: <kebab-name>           # ≤64 chars, lowercase + hyphens
-description: <what + when>   # ≤1024 chars, front-load what and when
+description: <what>          # ~80 chars, single sentence (see rule below)
 allowed-tools: <list>        # optional; only tool patterns the skill needs
 
 globs: "<glob>"              # optional; Cursor MDC auto-activation
@@ -27,6 +27,24 @@ paths: "<glob>"              # optional; Cursor MDC fallback
 alwaysApply: true            # optional; Cursor MDC; only for engineering-philosophy
 ---
 ```
+
+### Description rule
+
+Keep `description` to **~80 characters** — one short imperative sentence stating what the skill does. Hard cap: 120 chars (validator warns above 120).
+
+- ✅ `Apply Python conventions — uv, Ruff strict, mypy strict, pytest, pip-audit.` (76)
+- ✅ `Drive strict red-green-refactor TDD discipline on any code change, any language.` (80)
+- ❌ `Apply Python project conventions — uv for deps and builds, Ruff strict (E, F, I, UP, B, SIM, …), mypy strict (strict = true, warn_return_any = true …), pytest with pytest-cov and pytest-asyncio, …` (overflows at retrieval time)
+
+**Why short.** Anthropic Skills loads every skill's name+description into every session prompt. Long descriptions (>200 chars) bloat context, weight matching toward the most verbose skill regardless of fit, and dilute the trigger signal. Front-load *what* the skill does; defer *how / when / co-activation* to the body. The retrieval matcher reads the whole metadata payload — terse is sharper.
+
+**What goes where.**
+
+| Belongs in `description` | Belongs in body |
+|---|---|
+| One verb + object — what the skill does | Activation conditions, edge cases |
+| Distinguishing keyword if name is generic | Tool list rationale, anti-patterns |
+| | Co-activation graph with sibling skills |
 
 Fields **never** to include: `model:` (Claude-Code-only — preserve original in `reference/<agent>.md` header instead).
 

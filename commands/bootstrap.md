@@ -1,5 +1,5 @@
 ---
-description: Wire swell-agents/coding-skills into this project's instruction file (CLAUDE.md / AGENTS.md / .cursorrules) so engineering-philosophy and the rule-skill set are always-loaded context, not just retrieval-matched.
+description: Wire coding-skills into the project's CLAUDE.md / AGENTS.md / .cursorrules.
 allowed-tools: Bash(bash *), Read
 ---
 

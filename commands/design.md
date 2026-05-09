@@ -1,5 +1,5 @@
 ---
-description: Design technical architecture for the feature, library selection, or schema in $ARGUMENTS before implementation. Wraps the designing-architecture skill — researches the ecosystem under a bounded budget (≤3 candidates per decision, ≤5 web fetches per session), evaluates on stars/recency/license/dep-footprint/docs quality, and emits a TDD-ready implementation plan with components, data flow, and an ASCII diagram.
+description: Design architecture for $ARGUMENTS (wraps designing-architecture skill).
 allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, Bash(git ls-files), Bash(git log *)
 ---
 

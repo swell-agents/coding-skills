@@ -1,12 +1,12 @@
 ---
 name: reviewing-changes
-description: Run a layered quality gate over a code change — code quality, security audit, and architecture consistency, in that order. Use after writing or modifying code, before opening or merging a PR, when reviewing a diff or branch, or when asked for a code review, security audit, or architecture review. Produces severity-ranked findings (Critical / Major / Minor) tied to file:line, each with a concrete fix. Covers OWASP Top 10, SOLID, KISS / YAGNI / DRY, ruff + mypy for Python, golangci-lint for Go, solhint for Solidity, and common perf pitfalls (N+1, unbounded loops, leaks, missing indexes). For diffs over ~500 lines or 20 files, scopes the linter sweep to touched packages first and widens on demand. Read-only: never edits the diff, never runs unscoped Bash — every tool is a fixed command pattern (Bash(git diff *), Bash(uv run ruff *), Bash(golangci-lint *)). Composes with python-conventions, go-conventions, solidity-conventions, engineering-philosophy.
+description: Five-pass review of a diff: code, security, architecture, acceptance, AI-native.
 allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(git show *), Bash(git status *), Bash(git rev-parse *), Bash(gh pr view *), Bash(gh pr diff *), Bash(gh pr list *), Bash(uv run ruff *), Bash(uv run mypy *), Bash(uv run pip-audit *), Bash(npm audit *), Bash(golangci-lint *), Bash(govulncheck *), Bash(gosec *), Bash(solhint *), Bash(forge fmt --check), WebSearch, WebFetch
 ---
 
 ## Process
 
-Always run the three passes in order. Findings flow into one combined verdict.
+Always run the five passes in order. Findings flow into one combined verdict.
 
 ### 1. Read the rules
 
@@ -55,7 +55,19 @@ Check, in order, against OWASP Top 10:
 
 See `reference/owasp-checklist.md` for the canonical mapping with attack-vector notes.
 
-### Pass 4 — Acceptance / intent alignment
+### 5. Pass 3 — Architecture consistency
+
+- **Architecture map** — does the diff respect the `docs/architecture.md` (or equivalent) responsibility split? See `reference/architecture-map-pattern.md`.
+- **Layer violations** — dependencies pointing the wrong way (e.g., domain importing infrastructure).
+- **Boundary erosion** — public methods sneaking into private packages; circular dependencies.
+- **Missing abstractions** — same logic implemented twice with minor variations.
+- **Custom code where a library exists** — presumptive Critical when the diff reinvents primitives the ecosystem already solves (cryptography, encoding, standard-format parsers, wire codecs, retry/rate-limiting, ORMs, validators). Major for general utility code with a battle-tested equivalent. Three sub-checks:
+  - **Already in tree** — if the project's lockfile already pulls in a library that exports the function being hand-rolled, the hand-rolled version is Critical regardless of LoC. Don't import one symbol and reinvent the others.
+  - **Justification still valid** — comments that justified hand-rolling earlier ("avoid coupling", "keep dep tree small", "minimise binary size") must still hold for *this* diff. Once the dep is in the tree, the original reason has expired.
+  - **What to grep for** — custom encoders for standard formats, raw wire-protocol bytes as constants, hand-rolled crypto primitives, hand-written auth-token verification, custom retry-with-backoff loops.
+- **Pattern compliance** — clean architecture / DDD bounded contexts, only when the project documents a pattern.
+
+### 6. Pass 4 — Acceptance / intent alignment
 
 Does the diff actually solve the contract — linked GitHub issue, PR description, or active Spec Kit `specs/<NNN>-<feature>/tasks.md` Block? Cover the three axes:
 
@@ -65,7 +77,7 @@ Does the diff actually solve the contract — linked GitHub issue, PR descriptio
 
 See `agents/acceptance-auditor.md` for the full procedure.
 
-### Pass 5 — AI-Native-Coding Practices
+### 7. Pass 5 — AI-Native-Coding Practices
 
 Validates the diff and the surrounding project against the empirically-grounded rubric for working with AI coding agents. Eight rules, citation-grounded:
 
@@ -79,18 +91,6 @@ Validates the diff and the surrounding project against the empirically-grounded 
 - **R8** — Mechanical-rubric subset belongs in CI; bundled templates ship with the plugin.
 
 The rubric, with citations, lives at `reference/ai-native-rubric.md`. The mechanical-check templates ship at `reference/ai-native-templates/`. See `agents/ai-native-reviewer.md` for the full procedure.
-
-### Pass 3 — Architecture consistency
-
-- **Architecture map** — does the diff respect the `docs/architecture.md` (or equivalent) responsibility split? See `reference/architecture-map-pattern.md`.
-- **Layer violations** — dependencies pointing the wrong way (e.g., domain importing infrastructure).
-- **Boundary erosion** — public methods sneaking into private packages; circular dependencies.
-- **Missing abstractions** — same logic implemented twice with minor variations.
-- **Custom code where a library exists** — presumptive Critical when the diff reinvents primitives the ecosystem already solves (cryptography, encoding, standard-format parsers, wire codecs, retry/rate-limiting, ORMs, validators). Major for general utility code with a battle-tested equivalent. Three sub-checks:
-  - **Already in tree** — if the project's lockfile already pulls in a library that exports the function being hand-rolled, the hand-rolled version is Critical regardless of LoC. Don't import one symbol and reinvent the others.
-  - **Justification still valid** — comments that justified hand-rolling earlier ("avoid coupling", "keep dep tree small", "minimise binary size") must still hold for *this* diff. Once the dep is in the tree, the original reason has expired.
-  - **What to grep for** — custom encoders for standard formats, raw wire-protocol bytes as constants, hand-rolled crypto primitives, hand-written auth-token verification, custom retry-with-backoff loops.
-- **Pattern compliance** — clean architecture / DDD bounded contexts, only when the project documents a pattern.
 
 ## Output
 
