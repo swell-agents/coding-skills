@@ -10,6 +10,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.7.1] — 2026-05-12
+
+### Added
+
+- `skills/go-conventions/SKILL.md` — two new sections folded in from human-review feedback on `swell-wrapper` PR #24 (sourced via `swell-wrapper/.claude/skills/pr-lessons/SKILL.md`):
+  - **Protobuf Layout** — `.proto` sources live under a top-level `proto/<pkg>/`, generated `.pb.go` lives next to its consumer at `internal/<pkg>/<protopkg>/`; descriptive `.proto` filenames (not `v1.proto`); canonical `protoc --go_opt=paths=source_relative` invocation; regenerate via `make generate`.
+  - **Domain / Codec Separation** — domain types do not import codec-generated symbols; conversion happens at the codec boundary in unexported `toProtoX` / `fromProtoX` helpers; public APIs take domain types. Acceptance check: `git grep -l '<pbpkg>\.' internal/` must return only `codec.go` + generated `.pb.go`. Generalisable to any wire format (proto / CBOR / JSON), not proto-specific.
+
+### Changed
+
+- `.claude-plugin/plugin.json` — version 1.7.0 → 1.7.1.
+
 ## [1.7.0] — 2026-05-12
 
 ### Added
