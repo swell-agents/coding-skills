@@ -90,6 +90,48 @@ Follow the standard layout:
 
 `main` functions delegate to a testable `Run(ctx, args, stdout, stderr) int` in a sibling package.
 
+## Protobuf Layout
+
+When the project uses protobuf:
+
+- `.proto` sources live in a top-level `proto/<pkg>/` directory — never co-located with Go code.
+- Generated `.pb.go` lives next to its consumer at `internal/<pkg>/<protopkg>/`.
+- Name `.proto` files descriptively (`certificate.proto`), not version-only (`v1.proto`) — the proto package and `go_package` option already encode the version.
+- Regenerate via `make generate`. Canonical `protoc` invocation:
+  ```
+  protoc --go_opt=paths=source_relative \
+         --go_out=internal/<pkg>/<protopkg> \
+         --proto_path=proto/<protopkg> \
+         proto/<protopkg>/<file>.proto
+  ```
+  `paths=source_relative` makes the output path predictable — the generated filename matches the input `.proto`, placed directly under `--go_out`.
+
+## Domain / Codec Separation
+
+Domain types do not import codec-generated symbols. Enums and structs on the domain side are Go-native and live in the same package as the business logic; conversion to and from the wire format happens at the codec boundary.
+
+**Why.** A domain object that embeds `<pbpkg>.Result` (or any wire-format enum) cannot be encoded by anything else — adding CBOR / JSON / a schema rev forces a consumer rewrite. The same applies to `peer.ID` vs raw multihash bytes: domain holds the typed form, codec converts at I/O.
+
+**Layout.**
+
+```
+internal/<pkg>/result.go         — domain enum (Go-native)
+internal/<pkg>/codec.go          — public domain API + unexported toProtoX / fromProtoX
+internal/<pkg>/<fmt>v1/          — pure protoc-gen-go output, no hand-written code
+```
+
+Conversion helpers are unexported and the only file importing the codec package is `codec.go`:
+
+```go
+// codec.go — the only file that imports certv1.
+func toProtoResult(r Result) (certv1.Result, error) { /* switch */ }
+func fromProtoResult(r certv1.Result) (Result, error) { /* switch */ }
+```
+
+Public APIs (`Sign(epoch, target, result Result)`) take the domain type; the codec converts on the way to the wire. Adding a second wire format later means "add `cbor_codec.go` that reuses the same domain types," not a consumer rewrite.
+
+**Acceptance check.** `git grep -l '<pbpkg>\.' internal/` must return only `codec.go` + generated `.pb.go` files. Any other file naming `<pbpkg>.X` is a leak.
+
 ## Dependencies
 
 - **Prefer stdlib.** `log/slog` not `logrus`; `net/http` not `gin` unless routing complexity justifies it.
