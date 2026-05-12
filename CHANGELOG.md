@@ -10,6 +10,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [1.7.0] — 2026-05-12
+
+### Added
+
+- `skills/implementing-blocks/SKILL.md` — new workflow skill that drives one PR-stack block from a Spec Kit `tasks.md` end-to-end: Phase 0 dependency analysis, Phase 1 block selection, Phase 1.5 branch setup (`<NNN>-block-<letter>-<slug>`), Phase 2 TDD-strict subagent against `/speckit-implement`, Phase 3 five-pass parallel review via `reviewing-changes` (3-iteration cap), Phase 4 language-appropriate final gates (defers to `python-conventions` / `go-conventions` / `solidity-conventions`), Phase 5 push + draft PR + CI watch + CI fix loop (3-iteration cap). Ported and generalised from `swell-wrapper/.claude/commands/block-implement.md`; project-specific gates (`make build-reproducible`, Constitution refs, PR #13 scar) replaced with language-skill delegation.
+- `commands/block-implement.md` — thin wrapper invoking `implementing-blocks` with `$ARGUMENTS` as the block filter.
+- `INDEX.md` — `implementing-blocks` listed under workflow skills; `/coding-skills:block-implement` listed under slash commands.
+
+### Changed
+
+- `.claude-plugin/plugin.json` — version 1.6.0 → 1.7.0; description updated to "Eleven engineering skills + five parallel-review agents + seven slash commands".
+
 ## [1.6.0] — 2026-05-09
 
 ### Changed

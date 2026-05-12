@@ -15,6 +15,7 @@ Two layers: workflow skills (what to do), rule skills (conventions to apply). A 
 | [designing-architecture](skills/designing-architecture/) | Pre-implementation design — components, libraries, data flow, schema. |
 | [managing-github-issues](skills/managing-github-issues/) | Spec-driven decomposition into dependency-linked GitHub issues. |
 | [committing-changes](skills/committing-changes/) | Feature branch + PR + commit-message hooks discipline. |
+| [implementing-blocks](skills/implementing-blocks/) | Spec Kit project — implement one PR-stack block end-to-end (TDD + review + push + CI fix loop). |
 
 ## Rule skills
 
@@ -56,4 +57,5 @@ Skills are the source of truth and run in any harness. Claude Code consumers als
 | [/coding-skills:tdd](commands/tdd.md) | `running-tdd-cycles` |
 | [/coding-skills:pm](commands/pm.md) | `managing-github-issues` |
 | [/coding-skills:design](commands/design.md) | `designing-architecture` |
+| [/coding-skills:block-implement](commands/block-implement.md) | `implementing-blocks` — one Spec Kit block end-to-end including push + draft PR + CI loop |
 | [/coding-skills:bootstrap](commands/bootstrap.md) | One-shot wiring into the project's instruction file |

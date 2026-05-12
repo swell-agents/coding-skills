@@ -20,7 +20,7 @@ Examples:
 
 The rule applies to:
 
-- `skills/*/SKILL.md` — all 10 skills (enforced by `tests/frontmatter-validate.sh`).
+- `skills/*/SKILL.md` — all 11 skills (enforced by `tests/frontmatter-validate.sh`).
 - `agents/*.md` — the parallel-review subagents (Claude-Code-only; same retrieval pressure).
 - `commands/*.md` — slash commands (same retrieval pressure).
 
