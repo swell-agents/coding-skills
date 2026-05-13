@@ -1,21 +1,27 @@
 #!/usr/bin/env bash
-# bootstrap.sh — wire swell-agents/coding-skills into a project's instruction
-# file(s) so engineering-philosophy and the rule skills are part of the
-# always-loaded context, not just description-matched on retrieval.
+# bootstrap.sh — wire swell-agents/coding-skills into a project's existing
+# instruction file(s) so engineering-philosophy and the rule skills are part
+# of the always-loaded context, not just description-matched on retrieval.
 #
-# Detects CLAUDE.md (Claude Code), AGENTS.md (OpenAI Codex / cross-tool), and
-# .cursorrules (Cursor) — patches every file that exists, creates CLAUDE.md if
-# none do. Idempotent: re-running is a no-op once the marker is present.
+# Behavior (patch-only — no stub files are created):
+#   CLAUDE.md   — if present, append the engineering-skills footer block.
+#                 Idempotent via `<!-- coding-skills-bootstrap -->` marker.
+#   AGENTS.md   — never created, never modified. Present is fine; absent is
+#                 fine. The plugin no longer opines on a canonical layout.
+#   .cursorrules — if present, append the same footer block. Never created.
+#
+# If none of CLAUDE.md / AGENTS.md / .cursor/rules is present, the script
+# prints a hint and exits 0 — create whichever instruction file fits your
+# project, then re-run.
 #
 # Usage: run from the project root.
 #   bash scripts/bootstrap.sh
 
 set -euo pipefail
 
-MARKER="<!-- coding-skills-bootstrap -->"
-CANDIDATES=(CLAUDE.md AGENTS.md .cursorrules)
+CS_MARKER="<!-- coding-skills-bootstrap -->"
 
-append_block() {
+append_cs_block() {
   cat >> "$1" <<'EOF'
 
 <!-- coding-skills-bootstrap -->
@@ -46,21 +52,46 @@ EOF
 }
 
 patched=0
-existed=0
-for target in "${CANDIDATES[@]}"; do
-  [ -f "$target" ] || continue
-  existed=1
-  if grep -qF "$MARKER" "$target"; then
-    printf '%s already references coding-skills (marker found). Skipping.\n' "$target"
-  else
-    append_block "$target"
-    printf 'Appended coding-skills reference to %s\n' "$target"
-    patched=$((patched + 1))
-  fi
-done
 
-if [ "$existed" -eq 0 ]; then
-  printf '# Project instructions\n' > CLAUDE.md
-  append_block CLAUDE.md
-  printf 'Created CLAUDE.md with coding-skills reference.\n'
+# -- CLAUDE.md ---------------------------------------------------------------
+
+if [ -f CLAUDE.md ]; then
+  if grep -qF "$CS_MARKER" CLAUDE.md; then
+    printf 'CLAUDE.md already references coding-skills (marker found). Skipping.\n'
+  else
+    append_cs_block CLAUDE.md
+    printf 'Appended coding-skills reference to CLAUDE.md.\n'
+  fi
+  patched=1
+fi
+
+# -- AGENTS.md (informational only — never created, never modified) ----------
+
+if [ -f AGENTS.md ]; then
+  printf 'AGENTS.md present; not modified by bootstrap.\n'
+  patched=1
+fi
+
+# -- .cursorrules (legacy, append-only) --------------------------------------
+
+if [ -f .cursorrules ]; then
+  if grep -qF "$CS_MARKER" .cursorrules; then
+    printf '.cursorrules already references coding-skills (marker found). Skipping.\n'
+  else
+    append_cs_block .cursorrules
+    printf 'Appended coding-skills reference to .cursorrules.\n'
+  fi
+  patched=1
+fi
+
+# -- .cursor/rules (modern Cursor layout — informational only) ---------------
+
+if [ -d .cursor/rules ]; then
+  printf '.cursor/rules/ present; not modified by bootstrap.\n'
+  patched=1
+fi
+
+if [ "$patched" -eq 0 ]; then
+  printf 'No instruction file found (CLAUDE.md / AGENTS.md / .cursorrules / .cursor/rules/).\n'
+  printf 'Create one of them at the repo root, then re-run this script.\n'
 fi

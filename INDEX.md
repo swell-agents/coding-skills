@@ -58,4 +58,4 @@ Skills are the source of truth and run in any harness. Claude Code consumers als
 | [/coding-skills:pm](commands/pm.md) | `managing-github-issues` |
 | [/coding-skills:design](commands/design.md) | `designing-architecture` |
 | [/coding-skills:block-implement](commands/block-implement.md) | `implementing-blocks` — one Spec Kit block end-to-end including push + draft PR + CI loop |
-| [/coding-skills:bootstrap](commands/bootstrap.md) | One-shot wiring into the project's instruction file |
+| [/coding-skills:bootstrap](commands/bootstrap.md) | Append engineering-skills block to existing `CLAUDE.md` / `.cursorrules`. Patch-only — never creates files; never touches `AGENTS.md`. |

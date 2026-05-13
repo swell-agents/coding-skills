@@ -57,7 +57,7 @@ Then `/reload-plugins`. All 11 skills become available (auto-activated by descri
 | `/coding-skills:pm <plan\|start\|next\|advance\|status\|create-issues>` | `managing-github-issues` skill |
 | `/coding-skills:design [topic]` | `designing-architecture` skill |
 | `/coding-skills:block-implement [block\|next]` | `implementing-blocks` skill — one Spec Kit PR-stack block end-to-end (TDD + review + draft PR + CI fix loop) |
-| `/coding-skills:bootstrap` | One-shot wiring into the project's instruction file |
+| `/coding-skills:bootstrap` | One-shot wiring: append engineering-skills block to existing `CLAUDE.md` / `.cursorrules`. Patch-only — never creates files; never touches `AGENTS.md`. |
 
 ### Claude Code (manual)
 
@@ -91,7 +91,16 @@ bash ~/.claude/plugins/swell-agents/coding-skills/scripts/bootstrap.sh
 bash scripts/bootstrap.sh
 ```
 
-The script detects every instruction file the project uses (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`) and appends a coding-skills reference block to each. If none exist, it creates `CLAUDE.md`. Idempotent — re-running once the marker is in place is a no-op.
+The script is patch-only. It never creates instruction files; it only appends the engineering-skills block to ones that already exist.
+
+- **`CLAUDE.md`** — if present, the script appends the engineering-skills reference block (idempotent via the `<!-- coding-skills-bootstrap -->` marker). If missing, no-op.
+- **`AGENTS.md`** — never modified. Present is fine, absent is fine. The plugin does not opine on which instruction file is canonical; AGENTS.md as canonical, CLAUDE.md as canonical, or a mix is all acceptable.
+- **`.cursorrules`** — if the file exists, the same engineering-skills block is appended. The script does not create it.
+- **`.cursor/rules/`** — if the directory exists, no-op (you maintain rule files directly).
+
+If none of those files exists, the script prints a hint and exits 0 — create whichever instruction file fits your project (per the rubric's R2: presence of any one is the bar), then re-run.
+
+Re-running once the markers are in place is a no-op.
 
 ## Contributing
 

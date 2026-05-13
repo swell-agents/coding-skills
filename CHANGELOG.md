@@ -10,6 +10,20 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Changed
+
+- **Review rubric** (`skills/reviewing-changes/reference/ai-native-rubric.md`) — three scope updates driven by reviewer over-strictness:
+  - **R2 weakened.** Pass condition is now "at least one of AGENTS.md / CLAUDE.md / `.cursor/rules/` exists at repo root." The section-structure checklist (Build/Run, Test, Architecture, Conventions, Never-do) is downgraded to guidance — content can legitimately live in linked skills, ADRs, or per-language convention files.
+  - **R4 narrowed.** ADR requirement now applies only to projects using Spec Kit (detected via `specs/` with `plan.md`/`tasks.md`, or `.specify/`). Non-Spec-Kit projects record R4 as N/A.
+  - **R7 replaced.** Old R7 (explicit logging conventions in the instruction file) removed — logging belongs in per-language convention skills, not the review gate. New R7 is "Minimize context: delete, don't tombstone." Sources: Anthropic [effective context engineering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents); Augment Code 2026 study on AGENTS.md curation showing auto-generated context hurts task success in 5/8 settings (+2.45–3.92 steps, +20–23% cost); QCon London 2026 "The Right 300 Tokens Beat 100k Noisy Ones."
+- `agents/ai-native-reviewer.md`, `skills/reviewing-changes/SKILL.md` — updated to match the new rubric (drop logging check, gate R4 on Spec-Kit detection, weaken R2 to presence-only, enforce R7 minimize-context findings).
+- **Bootstrap is patch-only.** `scripts/bootstrap.sh` no longer creates stub files. `CLAUDE.md` present → append engineering-skills block (idempotent via `<!-- coding-skills-bootstrap -->`). `.cursorrules` present → same. `AGENTS.md` is never created and never modified. If no instruction file exists, the script prints a hint and exits 0. Removed the `write_agents_pointer` function, the `AGENTS_MARKER` constant, and the canonical-pointer template — this reverses the Claude-first opinion introduced earlier in this Unreleased cycle and aligns the script with the weakened R2.
+- `commands/bootstrap.md`, `README.md`, `INDEX.md` — documented the patch-only behavior.
+
+### Removed
+
+- `scripts/bootstrap.sh` — `write_agents_pointer` function, `AGENTS_MARKER` constant, and `agents_md_is_pointer` helper. No replacement; the script no longer generates or detects pointer templates.
+
 ## [1.7.1] — 2026-05-12
 
 ### Added

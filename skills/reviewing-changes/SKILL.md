@@ -82,12 +82,12 @@ See `agents/acceptance-auditor.md` for the full procedure.
 Validates the diff and the surrounding project against the empirically-grounded rubric for working with AI coding agents. Eight rules, citation-grounded:
 
 - **R1** — Comments WHY not WHAT (load-bearing for LLM coding; inaccurate comments harmful).
-- **R2** — Durable agent context belongs in instruction files (AGENTS.md / CLAUDE.md / .cursor/rules).
+- **R2** — Durable agent context belongs in instruction files. At least one of AGENTS.md / CLAUDE.md / `.cursor/rules/` must exist at repo root; section structure is guidance, not a graded checklist.
 - **R3** — Tests prefer real objects over mocks; mock only at I/O boundaries.
-- **R4** — Architectural decisions need ADRs (counter "vibe architecting").
+- **R4** — Architectural decisions need ADRs — **only for projects using Spec Kit** (detected via `specs/` + `plan.md`/`tasks.md` or `.specify/`). Non-Spec-Kit projects skip R4.
 - **R5** — Code review and PR hygiene survive AI throughput (small commits, decomposed PRs).
 - **R6** — Conversational interaction is iterative, not one-shot.
-- **R7** — Logging conventions must be explicit in instruction files.
+- **R7** — Minimize context: delete, don't tombstone. Every line in always-loaded files costs every turn — remove rather than mark removed.
 - **R8** — Mechanical-rubric subset belongs in CI; bundled templates ship with the plugin.
 
 The rubric, with citations, lives at `reference/ai-native-rubric.md`. The mechanical-check templates ship at `reference/ai-native-templates/`. See `agents/ai-native-reviewer.md` for the full procedure.
