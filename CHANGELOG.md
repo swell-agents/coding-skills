@@ -10,6 +10,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Changed
+
+- `scripts/bootstrap.sh` — split per-file behavior to enforce a Claude-first convention. `CLAUDE.md` remains the canonical source of truth and still receives the engineering-skills footer block (idempotent via `<!-- coding-skills-bootstrap -->`). `AGENTS.md` is now treated as a thin pointer to `CLAUDE.md`: missing → script writes the canonical pointer template (with a `<!-- coding-skills-agents-pointer -->` marker); already-pointer → no-op; substantive existing content → refuse to overwrite and print a clear warning so user content is never silently destroyed. `.cursorrules` keeps its existing append-only behavior. Convention is in use in `swell-storage-contracts`, `swell-wrapper`, and `coder-agent` (PR swell-agents/coder-agent#104).
+- `commands/bootstrap.md`, `README.md`, `INDEX.md` — documented the new convention and the per-file behavior.
+
 ## [1.7.1] — 2026-05-12
 
 ### Added

@@ -57,7 +57,7 @@ Then `/reload-plugins`. All 11 skills become available (auto-activated by descri
 | `/coding-skills:pm <plan\|start\|next\|advance\|status\|create-issues>` | `managing-github-issues` skill |
 | `/coding-skills:design [topic]` | `designing-architecture` skill |
 | `/coding-skills:block-implement [block\|next]` | `implementing-blocks` skill — one Spec Kit PR-stack block end-to-end (TDD + review + draft PR + CI fix loop) |
-| `/coding-skills:bootstrap` | One-shot wiring into the project's instruction file |
+| `/coding-skills:bootstrap` | One-shot wiring: append engineering-skills block to canonical `CLAUDE.md` and create `AGENTS.md` as a pointer (refuses to overwrite substantive `AGENTS.md`) |
 
 ### Claude Code (manual)
 
@@ -91,7 +91,15 @@ bash ~/.claude/plugins/swell-agents/coding-skills/scripts/bootstrap.sh
 bash scripts/bootstrap.sh
 ```
 
-The script detects every instruction file the project uses (`CLAUDE.md`, `AGENTS.md`, `.cursorrules`) and appends a coding-skills reference block to each. If none exist, it creates `CLAUDE.md`. Idempotent — re-running once the marker is in place is a no-op.
+The script enforces a Claude-first convention:
+
+- **`CLAUDE.md`** is the canonical, single source of truth for repo instructions. The script appends a coding-skills reference block (idempotent via the `<!-- coding-skills-bootstrap -->` marker) and creates the file if missing.
+- **`AGENTS.md`** is intentionally a thin pointer to `CLAUDE.md` so non-Claude harnesses (Codex, Cursor, Copilot, Gemini) land on the same content without duplicating it. The script writes the canonical pointer template if `AGENTS.md` is missing. If `AGENTS.md` already exists with substantive content, the script refuses to overwrite it and prints a warning — user content is never silently destroyed.
+- **`.cursorrules`** (legacy): if the file exists, the same engineering-skills block is appended. The script does not create it.
+
+In-use examples of the convention: [`swell-storage-contracts`](https://github.com/swell-agents/swell-storage-contracts/blob/main/AGENTS.md), [`swell-wrapper`](https://github.com/swell-agents/swell-wrapper), [`coder-agent`](https://github.com/swell-agents/coder-agent/blob/main/AGENTS.md).
+
+Re-running once the markers are in place is a no-op.
 
 ## Contributing
 
