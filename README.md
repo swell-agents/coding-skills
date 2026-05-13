@@ -57,7 +57,7 @@ Then `/reload-plugins`. All 11 skills become available (auto-activated by descri
 | `/coding-skills:pm <plan\|start\|next\|advance\|status\|create-issues>` | `managing-github-issues` skill |
 | `/coding-skills:design [topic]` | `designing-architecture` skill |
 | `/coding-skills:block-implement [block\|next]` | `implementing-blocks` skill — one Spec Kit PR-stack block end-to-end (TDD + review + draft PR + CI fix loop) |
-| `/coding-skills:bootstrap` | One-shot wiring: append engineering-skills block to canonical `CLAUDE.md` and create `AGENTS.md` as a pointer (refuses to overwrite substantive `AGENTS.md`) |
+| `/coding-skills:bootstrap` | One-shot wiring: append engineering-skills block to existing `CLAUDE.md` / `.cursorrules`. Patch-only — never creates files; never touches `AGENTS.md`. |
 
 ### Claude Code (manual)
 
@@ -91,13 +91,14 @@ bash ~/.claude/plugins/swell-agents/coding-skills/scripts/bootstrap.sh
 bash scripts/bootstrap.sh
 ```
 
-The script enforces a Claude-first convention:
+The script is patch-only. It never creates instruction files; it only appends the engineering-skills block to ones that already exist.
 
-- **`CLAUDE.md`** is the canonical, single source of truth for repo instructions. The script appends a coding-skills reference block (idempotent via the `<!-- coding-skills-bootstrap -->` marker) and creates the file if missing.
-- **`AGENTS.md`** is intentionally a thin pointer to `CLAUDE.md` so non-Claude harnesses (Codex, Cursor, Copilot, Gemini) land on the same content without duplicating it. The script writes the canonical pointer template if `AGENTS.md` is missing. If `AGENTS.md` already exists with substantive content, the script refuses to overwrite it and prints a warning — user content is never silently destroyed.
-- **`.cursorrules`** (legacy): if the file exists, the same engineering-skills block is appended. The script does not create it.
+- **`CLAUDE.md`** — if present, the script appends the engineering-skills reference block (idempotent via the `<!-- coding-skills-bootstrap -->` marker). If missing, no-op.
+- **`AGENTS.md`** — never modified. Present is fine, absent is fine. The plugin does not opine on which instruction file is canonical; AGENTS.md as canonical, CLAUDE.md as canonical, or a mix is all acceptable.
+- **`.cursorrules`** — if the file exists, the same engineering-skills block is appended. The script does not create it.
+- **`.cursor/rules/`** — if the directory exists, no-op (you maintain rule files directly).
 
-In-use examples of the convention: [`swell-storage-contracts`](https://github.com/swell-agents/swell-storage-contracts/blob/main/AGENTS.md), [`swell-wrapper`](https://github.com/swell-agents/swell-wrapper), [`coder-agent`](https://github.com/swell-agents/coder-agent/blob/main/AGENTS.md).
+If none of those files exists, the script prints a hint and exits 0 — create whichever instruction file fits your project (per the rubric's R2: presence of any one is the bar), then re-run.
 
 Re-running once the markers are in place is a no-op.
 

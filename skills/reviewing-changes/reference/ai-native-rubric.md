@@ -15,10 +15,10 @@ Comments are load-bearing for LLM coding (bug-fixing ~3× [vitale2026impact]; co
 
 Empirical: AGENTS.md cuts agent runtime −28.64% and output tokens −16.58% [lulla2026impact]; AGENTS.md is the emerging interoperable standard across Claude Code, Codex, Cursor, Copilot, Gemini in 2,923 OSS repos [galster2026configuring]; effective manifests are action-oriented (Build/Run, Architecture, Conventions) [chatlatanagulchai2025use]; cursor rules cluster into 5 themes (Conventions, Guidelines, Project Information, LLM Directives, Examples) [jiang2025empirical].
 
-- Project must have AGENTS.md or equivalent (CLAUDE.md, .cursor/rules) at repo root.
-- Content must include: Build/Run commands, Test commands, Architecture summary, Conventions, Never-do rules.
-- Every workflow / Make-target / file referenced in the instruction file must actually exist.
-- Static rules decay mid-session [ma2026zoro] — AGENTS.md should include a re-anchor trigger ("Before each new subtask, re-verify constraints") for long sessions.
+- Project must have **at least one** of AGENTS.md / CLAUDE.md / `.cursor/rules/` at repo root. Presence is the bar; absence is the only Major.
+- Recommended (but not required) sections when authoring a fresh file: Build/Run, Test, Architecture summary, Conventions, Never-do. Treat as guidance, not a checklist to grade against — content can also live in linked skills, ADRs, or per-language convention files.
+- Every workflow / Make-target / file referenced in the instruction file must actually exist (broken pointer = Major).
+- Static rules decay mid-session [ma2026zoro] — long-session projects benefit from a re-anchor trigger ("Before each new subtask, re-verify constraints"), but its absence is at most Minor.
 
 ### R2.1 — Single source of truth across instruction files
 
@@ -39,9 +39,13 @@ Empirical: agents generate mocks in 36% of test commits vs 26% for humans [hora2
 - Hand-rolled fakes that satisfy real interfaces > heavy mocking frameworks (gomock, mockery, testify/mock).
 - TDD-first for delegated work: failing test commits before implementation; reduces "agent passes its own tests" failure mode.
 
-## Rule R4 — Architectural decisions need ADRs
+## Rule R4 — Architectural decisions need ADRs (Spec-Kit projects only)
 
 Empirical: agents make 5 categories of implicit architectural decisions silently (framework selection, task decomposition, default configuration, scaffolding, integration protocols) — "vibe architecting" [konrad2026architecture]. Agentic refactoring stays shallow (median class LOC delta −15.25 [horikawa2025agentic]) — structural redesign remains human work.
+
+**Scope:** This rule applies **only to projects using Spec Kit** (detected by presence of `specs/` directory with block-structured `plan.md` / `tasks.md` artefacts, or a `.specify/` config). Non-Spec-Kit projects: skip R4 — record "N/A (not a Spec-Kit project)" and move on. The ADR discipline assumes the upstream planning artefacts that Spec Kit produces; outside that context, ADRs duplicate work that lives in PR descriptions and design docs.
+
+For Spec-Kit projects:
 
 - Every prompt-level architectural choice (framework, schema, protocol, deployment topology) → ADR in `docs/adr/`.
 - Bare "refactor this module" delegations without target structure → Major.
@@ -64,13 +68,13 @@ Empirical: progressive specification dominates real developer-AI sessions [tang2
 - One-shot delegation of multi-day features without intermediate verification = Major.
 - Spec Kit `tasks.md` block structure satisfies this when used.
 
-## Rule R7 — Logging conventions must be explicit
+## Rule R7 — Minimize context: delete, don't tombstone
 
-Empirical: agents change logging less often than humans (58.4% of repos) but inject 30% more logs per kLOC when they do; explicit logging instructions are rare (4.7% of repos) and ineffective when vague (67% non-compliance); humans perform 72.5% of post-generation log repairs as silent maintenance [ouatiti2026do].
+Empirical: every line in AGENTS.md / CLAUDE.md / skill files / agent definitions loads before every turn, so context the agent doesn't actually use is subtracted from the conversation budget. Anthropic context-engineering guidance is "the smallest possible set of high-signal tokens" [anthropic2026context]; hand-curated context files outperform LLM-generated ones in 5/8 settings, with auto-generation adding 2.45–3.92 extra steps per task and 20–23% inference cost [augment2026agentsmd]; long context also triggers "lost in the middle" rule dropout in long sessions [ma2026zoro].
 
-- Instruction file (AGENTS.md / CLAUDE.md) must contain a Logging section: library choice, level policy, key naming, what NOT to log (secrets / PII / sk bytes).
-- Vague "log appropriately" = Minor; absent = Major.
-- Code review pass must include a logging-diff check for agent-generated PRs.
+- **Delete, don't tombstone.** When a rule / section / comment is removed, remove it. No `(removed)` markers, no commented-out blocks, no "previously this said …" preambles. Git history is the audit trail.
+- **Shorten when you can.** If a passage can be cut without losing decision-relevant content, cut it. One real snippet beats three paragraphs of description.
+- Applies to: this rubric, SKILL.md, AGENTS.md / CLAUDE.md, agent definitions, slash-command bodies, in-code comments.
 
 ## Rule R8 — Mechanical checks must be in CI
 
