@@ -10,6 +10,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+
+- `skills/go-conventions/SKILL.md` — **testify mandate** in the Testing section, folded in from human-review feedback on `swell-wrapper` PR #36 (sourced via `swell-wrapper/.claude/skills/pr-lessons/SKILL.md`). Every `_test.go` must use `github.com/stretchr/testify/{require,assert}` instead of hand-written `if err != nil { t.Fatalf(...) }` / `if got != want { t.Errorf(...) }` plumbing. Includes a translation table and the `(t, want, got)` argument-order rule.
+
 ### Changed
 
 - **Review rubric** (`skills/reviewing-changes/reference/ai-native-rubric.md`) — three scope updates driven by reviewer over-strictness:
