@@ -24,6 +24,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - `scripts/bootstrap.sh` — `write_agents_pointer` function, `AGENTS_MARKER` constant, and `agents_md_is_pointer` helper. No replacement; the script no longer generates or detects pointer templates.
 
+## [1.8.1] — 2026-05-14
+
+### Added
+
+- `skills/go-conventions/SKILL.md` — **testify mandate** in the Testing section, folded in from human-review feedback on `swell-wrapper` PR #36 (sourced via `swell-wrapper/.claude/skills/pr-lessons/SKILL.md`). Every `_test.go` must use `github.com/stretchr/testify/{require,assert}` instead of hand-written `if err != nil { t.Fatalf(...) }` / `if got != want { t.Errorf(...) }` plumbing. Includes a translation table and the `(t, want, got)` argument-order rule.
+
+### Changed
+
+- `.claude-plugin/plugin.json` — version 1.8.0 → 1.8.1.
+
 ## [1.7.1] — 2026-05-12
 
 ### Added

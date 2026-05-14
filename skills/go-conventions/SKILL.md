@@ -54,6 +54,19 @@ Warnings block CI. No `//nolint` without a rule-specific target and an explanati
 
 - **`go test ./... -race -covermode=atomic -coverprofile=coverage.out`** — race detector mandatory. Fail on uncovered races.
 - **Table-driven tests** — default pattern for unit tests.
+- **`github.com/stretchr/testify/{require,assert}`** — mandatory in every `_test.go`. Use `require` for preconditions that must abort the test (errors, setup) and `assert` for value comparisons that should keep collecting failures. No hand-written `if err != nil { t.Fatalf(...) }` / `if got != want { t.Errorf(...) }` plumbing.
+
+  | Hand-written                                          | Replace with                                     |
+  | ----------------------------------------------------- | ------------------------------------------------ |
+  | `if err != nil { t.Fatalf("...: %v", err) }`          | `require.NoError(t, err)`                        |
+  | `if err == nil { t.Fatal("want error") }`             | `require.Error(t, err)` / `require.ErrorIs(...)` |
+  | `if got != want { t.Fatalf(...) }`                    | `require.Equal(t, want, got)`                    |
+  | `if !bytes.Equal(got, want) { t.Fatalf(...) }`        | `assert.Equal(t, want, got)`                     |
+  | `if got != want { t.Errorf(...) }` (continues on fail) | `assert.Equal(t, want, got)`                     |
+  | `if !reflect.DeepEqual(got, want) { ... }`            | `assert.Equal(t, want, got)`                     |
+
+  Argument order is `(t, want, got)` — expected first, actual second. Reversing it makes failure messages lie. Inside `f.Fuzz(func(t *testing.T, ...))` use `require`/`assert` on the inner `t` the same way.
+
 - **Test files** — `*_test.go` next to the code. External test packages (`package foo_test`) for black-box tests; `testpackage` linter enforces this where applicable.
 - **Integration tests** — gate behind build tags (`//go:build integration`), run in separate CI step.
 - **Fuzz** — `go test -fuzz=Fuzz...` for parsers and security-relevant decoders. Commit seed corpus under `testdata/fuzz/`.
