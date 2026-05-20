@@ -55,7 +55,7 @@ Then `/reload-plugins`. All 12 skills become available (auto-activated by descri
 | `/coding-skills:commit [scope]` | `committing-changes` skill |
 | `/coding-skills:tdd [requirement\|phase]` | `running-tdd-cycles` skill |
 | `/coding-skills:pm <plan\|start\|next\|advance\|status\|create-issues>` | `managing-github-issues` skill |
-| `/coding-skills:block-issues [feature\|--dry-run]` | `creating-block-issues` skill — one "Implement Block X" GitHub issue per Spec Kit `tasks.md` PR-stack block (coder-agent workflow convention) |
+| `/coding-skills:block-issues [feature\|--dry-run]` | `creating-block-issues` skill — one "Implement Block X" GitHub issue per Spec Kit `tasks.md` PR-stack block (minimal body, no labels) |
 | `/coding-skills:design [topic]` | `designing-architecture` skill |
 | `/coding-skills:block-implement [block\|next]` | `implementing-blocks` skill — one Spec Kit PR-stack block end-to-end (TDD + review + draft PR + CI fix loop) |
 | `/coding-skills:bootstrap` | One-shot wiring: append engineering-skills block to existing `CLAUDE.md` / `.cursorrules`. Patch-only — never creates files; never touches `AGENTS.md`. |
