@@ -24,6 +24,18 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - `scripts/bootstrap.sh` — `write_agents_pointer` function, `AGENTS_MARKER` constant, and `agents_md_is_pointer` helper. No replacement; the script no longer generates or detects pointer templates.
 
+## [1.8.2] — 2026-05-20
+
+### Added
+
+- `skills/creating-block-issues/SKILL.md` — generate one "Implement Block X" GitHub issue per Spec Kit `tasks.md` PR-stack block, following the swell-wrapper [coder-agent-workflow](https://github.com/swell-agents/swell-wrapper/blob/main/docs/coder-agent-workflow.md) convention. One issue per Block (not per task), labels `ready` + `swa-impl-block`, minimal 3-bullet body (Spec / Block / Tasks) pointing at `tasks.md` as the source of truth. Cross-block dependencies via GitHub's native Issue Dependencies feature, not body fields. Surfaces a copy-pasteable "Blocked by" instruction block for the user to set in the GitHub UI; never auto-overwrites existing block-issues.
+- `commands/block-issues.md` — `/coding-skills:block-issues` slash command wrapping the new skill. Args: empty (use active feature from `.specify/feature.json`), `<feature-dir>` (override), or `--dry-run` (parse + render without `gh` calls).
+- `INDEX.md`, `README.md` — list the new skill + command alongside `managing-github-issues` / `implementing-blocks` / `/coding-skills:pm` / `/coding-skills:block-implement`.
+
+### Changed
+
+- `.claude-plugin/plugin.json` — version 1.8.1 → 1.8.2; description updated to "Twelve engineering skills + five parallel-review agents + eight slash commands".
+
 ## [1.8.1] — 2026-05-14
 
 ### Added
