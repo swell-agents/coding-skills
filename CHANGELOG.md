@@ -24,6 +24,21 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - `scripts/bootstrap.sh` — `write_agents_pointer` function, `AGENTS_MARKER` constant, and `agents_md_is_pointer` helper. No replacement; the script no longer generates or detects pointer templates.
 
+## [1.8.5] — 2026-05-21
+
+### Added
+
+- **`skills/solidity-conventions/SKILL.md`** — two new sections promoted from `swell-storage-contracts/CLAUDE.md` (and duplicated in `swell-wrapper/CLAUDE.md`):
+  - **Events and Logging**: past-tense names, indexed params for filterable keys, emit-after-store ordering, no raw blobs already public on chain, no `console2.log` in production contracts, event-signature changes are ABI changes and update specs in the same commit.
+  - **NatSpec**: `@inheritdoc IThing` on impl entries with a matching interface signature instead of restated `@notice` prose (matches OZ / Aave / Compound / Uniswap convention; avoids interface/impl doc drift). `@notice` direct for constants, internal helpers, custom errors, and modifiers with no interface counterpart.
+- **`skills/engineering-philosophy/SKILL.md`** — new principle **No Number Without Measurement**: gas / latency / throughput / proof-size figures in docs must come from a test run, profile, fixture, or upstream spec citation. Author-quoted "approximately X" without a source is a future-self trap; remove or measure. Same applies to scaling claims.
+- **`skills/running-tdd-cycles/SKILL.md`** — RED-phase rule **Test names are claims, not labels**: verify the fixture shape, input source, and assertion target match the test name before the test goes green. A test named `test_decodesV4Quote` that loads a V5 fixture silently pins the wrong invariant.
+- **`skills/committing-changes/SKILL.md`** — branch prefix list extended with `infra/` (CI, tooling, dependency bumps, infrastructure changes) and `ai-native/` (AI-native engineering practice updates: agent rubrics, skill changes, automation). The `pre-push` hook does not enforce prefixes; this is documentation guidance.
+
+### Changed
+
+- `.claude-plugin/plugin.json` — version 1.8.4 → 1.8.5.
+
 ## [1.8.4] — 2026-05-21
 
 ### Changed

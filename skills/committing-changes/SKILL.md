@@ -23,7 +23,7 @@ allowed-tools: Read, Edit, Write, Bash(git status *), Bash(git diff *), Bash(git
    ```
    git checkout -b <type>/<description>
    ```
-   Valid `type` prefixes: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`.
+   Valid `type` prefixes: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `infra`, `ai-native`.
 
 3. **Auto-fix before commit.** Run the project's linter/formatter (e.g., `ruff format && ruff check` for Python, `golangci-lint run` for Go, `forge fmt && solhint` for Solidity). The pre-commit hook (if installed) runs the project's full quality gate.
 
