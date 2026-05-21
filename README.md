@@ -10,7 +10,7 @@ Claude Code consumers also get parallel-friendly **agents** under `agents/` (e.g
 
 See [INDEX.md](INDEX.md) for the full list. Two kinds:
 
-- **Workflow skills** — what to do (verbs): `running-tdd-cycles`, `reviewing-changes`, `designing-architecture`, `managing-github-issues`, `committing-changes` (also installs an optional PR-size CI gate that fails PRs over 1000 changed lines, excluding tests/docs/lockfiles/generated), `implementing-blocks` (Spec Kit projects — one PR-stack block end-to-end).
+- **Workflow skills** — what to do (verbs): `running-tdd-cycles`, `reviewing-changes`, `designing-architecture`, `managing-github-issues`, `creating-block-issues` (Spec Kit projects — one issue per `tasks.md` PR-stack block), `committing-changes` (also installs an optional PR-size CI gate that fails PRs over 1000 changed lines, excluding tests/docs/lockfiles/generated), `implementing-blocks` (Spec Kit projects — one PR-stack block end-to-end).
 - **Rule skills** — conventions to apply (nouns): `python-conventions`, `go-conventions`, `solidity-conventions`, `shell-discipline`, `engineering-philosophy`.
 
 Workflow skills cross-reference rule skills; agents activate the rule skill alongside the workflow skill when the file or language matches.
@@ -47,7 +47,7 @@ Inside any Claude Code session:
 /plugin install coding-skills@swell-agents
 ```
 
-Then `/reload-plugins`. All 11 skills become available (auto-activated by description), plus 3 parallel-review agents and 7 slash commands:
+Then `/reload-plugins`. All 12 skills become available (auto-activated by description), plus 3 parallel-review agents and 8 slash commands:
 
 | Slash command | Wraps |
 |---|---|
@@ -55,6 +55,7 @@ Then `/reload-plugins`. All 11 skills become available (auto-activated by descri
 | `/coding-skills:commit [scope]` | `committing-changes` skill |
 | `/coding-skills:tdd [requirement\|phase]` | `running-tdd-cycles` skill |
 | `/coding-skills:pm <plan\|start\|next\|advance\|status\|create-issues>` | `managing-github-issues` skill |
+| `/coding-skills:block-issues [feature\|--dry-run]` | `creating-block-issues` skill — one "Implement Block X" GitHub issue per Spec Kit `tasks.md` PR-stack block (minimal body, no labels) |
 | `/coding-skills:design [topic]` | `designing-architecture` skill |
 | `/coding-skills:block-implement [block\|next]` | `implementing-blocks` skill — one Spec Kit PR-stack block end-to-end (TDD + review + draft PR + CI fix loop) |
 | `/coding-skills:bootstrap` | One-shot wiring: append engineering-skills block to existing `CLAUDE.md` / `.cursorrules`. Patch-only — never creates files; never touches `AGENTS.md`. |
