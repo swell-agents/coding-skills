@@ -1,7 +1,7 @@
 ---
 name: creating-block-issues
 description: Generate one "Implement Block X" GitHub issue per Spec Kit tasks.md PR-stack block, with a minimal body pointing at tasks.md as the source of truth.
-allowed-tools: Read, Glob, Grep, Bash(gh issue *), Bash(gh repo view *), Bash(git rev-parse *), Bash(git config --get *), Bash(cat *), Bash(ls *)
+allowed-tools: Read, Glob, Grep, Bash(gh issue *), Bash(gh repo view *), Bash(gh label *), Bash(git rev-parse *), Bash(git config --get *), Bash(cat *), Bash(ls *)
 ---
 
 ## When this skill applies
@@ -29,7 +29,11 @@ That is the entire body. No "ready criteria" recap, no scar list, no dispatch bo
 
 ## Labels
 
-This skill does **not** apply or create labels. Label conventions are project-specific and live with the project's PM workflow ([`managing-github-issues`](../managing-github-issues/SKILL.md) or a custom daemon's documentation), not with this issue-creation surface. If your project needs `ready` / `priority:high` / a daemon opt-in label, apply it manually after issue creation via `gh issue edit <N> --add-label <name>` or via the GitHub UI.
+Every issue this skill creates carries the `swa-impl-block` label. The label is the dispatch signal a downstream coder-agent daemon polls for; an unlabeled block-issue silently never gets picked up. The skill auto-creates the label in the target repo if missing (color `#0E8A16`, description `Spec Kit block-implement dispatch (coder-agent)`).
+
+Additional project-specific labels (`ready`, priority, milestone) are NOT applied here — add them after creation with `gh issue edit <N> --add-label <name>` or via the GitHub UI.
+
+If a consuming repo wants a different dispatch label name (or none), it can override at invocation time by passing `--label <name>` / `--no-label` through the wrapping `/coding-skills:block-issues` command. The default stays `swa-impl-block`.
 
 ## Execution flow
 
@@ -47,17 +51,28 @@ This skill does **not** apply or create labels. Label conventions are project-sp
 
 5. **Check for existing block-issues**. Run `gh issue list --search "Implement Block <X> in:title" --state all` for each block. If any return a non-empty match, **abort** and report the existing issue numbers. Ask the user how to proceed (re-open via UI, skip the block, supersede with a new issue manually). Never overwrite or auto-close.
 
-6. **Create issues** (one per block, in tasks.md order):
+6. **Ensure dispatch label exists** (unless `--no-label` was passed). Resolve the label name (default `swa-impl-block`, override via `--label <name>`). Run `gh label list --search <name>` to check. If absent, create it idempotently:
+
+   ```bash
+   gh label create swa-impl-block \
+     --description "Spec Kit block-implement dispatch (coder-agent)" \
+     --color "0E8A16"
+   ```
+
+   If `gh label create` fails because the label already exists (race), proceed silently. If it fails for any other reason (permissions), abort before creating any issues.
+
+7. **Create issues** (one per block, in tasks.md order):
 
    ```bash
    gh issue create \
      --title "Implement Block <X> — <name>" \
-     --body "<rendered template>"
+     --body "<rendered template>" \
+     --label swa-impl-block
    ```
 
-   Capture the returned issue number per block. No `--label` flag — see the Labels section.
+   Omit `--label` only when `--no-label` was passed. Capture the returned issue number per block.
 
-7. **Surface dependency-setting instructions** (no auto-write). Parse the "Block Dependency Graph" or "Dependencies & Execution Order" section of tasks.md; output a copy-pasteable instruction block for the user to set "Blocked by" relations via GitHub's UI:
+8. **Surface dependency-setting instructions** (no auto-write). Parse the "Block Dependency Graph" or "Dependencies & Execution Order" section of tasks.md; output a copy-pasteable instruction block for the user to set "Blocked by" relations via GitHub's UI:
 
    ```
    Set the following Blocked-by relations in GitHub
@@ -71,16 +86,17 @@ This skill does **not** apply or create labels. Label conventions are project-sp
 
    The skill does NOT call `gh api` to set the dependencies — as of authoring, GitHub's issue-dependency API is preview-only and `gh` CLI has no stable verb. Manual one-time setup is the documented contract.
 
-8. **Final report**:
+9. **Final report**:
 
    ```
-   Created N block-issues for feature <NNN>-<feature> in <owner>/<repo>:
+   Created N block-issues for feature <NNN>-<feature> in <owner>/<repo>
+   (label: swa-impl-block):
      #<A> Implement Block A — <name>
      #<B> Implement Block B — <name>
      ...
 
    Next steps:
-     1. Apply any project-specific labels (e.g. `ready`, priority, milestone) via `gh issue edit <N> --add-label <name>` or the GitHub UI.
+     1. Apply any additional project-specific labels (`ready`, priority, milestone) via `gh issue edit <N> --add-label <name>` or the GitHub UI.
      2. Set Blocked-by relations per the instruction block above.
    ```
 
@@ -88,17 +104,19 @@ This skill does **not** apply or create labels. Label conventions are project-sp
 
 Single mode: **create-block-issues**. Argument shape (passed via the wrapping command):
 
-- **Empty** → use the active feature from `.specify/feature.json`.
+- **Empty** → use the active feature from `.specify/feature.json`. Attaches the default `swa-impl-block` label.
 - **`<feature-dir>`** (e.g. `001-uptime-settlement`) → override the active-feature resolution.
-- **`--dry-run`** → parse tasks.md and render the would-be issue bodies without calling `gh`. Always echo the parsed block list + dependency graph in dry-run mode.
+- **`--dry-run`** → parse tasks.md and render the would-be issue bodies without calling `gh`. Always echo the parsed block list + dependency graph + resolved label in dry-run mode.
+- **`--label <name>`** → override the default dispatch label name.
+- **`--no-label`** → skip label attachment entirely (issues created bare).
 
 ## Safety rules
 
 - **NEVER** create issues in a repo whose `origin` URL was not just echoed to the user.
 - **NEVER** overwrite existing block-issues. If step 5 finds a match, abort and report.
-- **NEVER** apply or create labels — that's the project's PM-workflow concern, not this skill's. See the Labels section.
 - **NEVER** include the constitution, scars, dispatch boilerplate, or per-task acceptance criteria in the body. The template is the contract; deviation creates drift between issue and `tasks.md` / `CLAUDE.md`.
-- Echo every state-changing `gh issue create` invocation back to the user before running it.
+- **NEVER** attach labels other than the one resolved in step 6 (default `swa-impl-block`, or whatever the caller passed via `--label`). Additional project-specific labels are the consuming project's PM-workflow concern — they go in via `gh issue edit` afterward.
+- Echo every state-changing `gh issue create` / `gh label create` invocation back to the user before running it.
 
 ## Anti-patterns
 
@@ -106,7 +124,7 @@ Single mode: **create-block-issues**. Argument shape (passed via the wrapping co
 - **Epic issue bundling all blocks.** Adds a maintenance burden (the epic body has to be updated as blocks close) without giving a richer signal than the native GitHub Project view + Issue Dependencies graph already provide.
 - **Copying `CLAUDE.md` / constitution / scars into the body.** Source of truth lives in the file, not the issue. Both humans and any automation read `tasks.md` at implementation time; the issue body just points at it.
 - **Cross-block dependency lines in the body** (e.g. "Blocked by: Block A"). Use GitHub's native Issue Dependencies feature instead — both humans and automation consume it from the sidebar. Body-field links drift when issues close.
-- **Auto-applying project-specific labels.** Different consumers want different label schemes; baking one in couples this skill to a particular workflow. Skill creates the issue; project applies its own labels after.
+- **Stuffing the issue with extra labels.** The single dispatch label (`swa-impl-block` by default) is the contract — it tells the downstream coder-agent the issue is ready to pick up. Priority, milestone, `ready`, `area/*` etc. are the consuming project's PM-workflow concern and go on after creation via `gh issue edit`. Baking multiple labels in here couples the skill to one project's workflow.
 
 ## See also
 
