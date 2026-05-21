@@ -24,6 +24,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - `scripts/bootstrap.sh` — `write_agents_pointer` function, `AGENTS_MARKER` constant, and `agents_md_is_pointer` helper. No replacement; the script no longer generates or detects pointer templates.
 
+## [1.8.4] — 2026-05-21
+
+### Changed
+
+- **`skills/creating-block-issues/SKILL.md`** — step 7 (formerly "Surface dependency-setting instructions (no auto-write)") rewritten to **auto-write Blocked-by relations via GraphQL `addBlockedBy`**. Mode 1 only (Mode 2 has no pre-known dep graph). Flow: batched node-ID fetch for all created issues in one GraphQL query → per-edge `addBlockedBy(issueId, blockingIssueId)` mutation → manual-fallback instruction block printed only for edges that failed (insufficient scope, network, etc.). Reverses the 1.8.2 "no auto-write" stance, which cited the dependency API as preview-only; that's now stable. Idempotent on "already blocked by" errors; never silently drops an edge.
+- `commands/block-issues.md` — documents the auto-write behaviour and the manual-fallback path.
+- `.claude-plugin/plugin.json` — version 1.8.3 → 1.8.4.
+
 ## [1.8.3] — 2026-05-21
 
 ### Added

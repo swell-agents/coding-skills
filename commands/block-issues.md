@@ -1,6 +1,6 @@
 ---
 description: Create one "Implement Block X" GitHub issue per Spec Kit tasks.md PR-stack block, with a minimal body pointing at tasks.md as the source of truth.
-allowed-tools: Read, Glob, Grep, Bash(gh issue *), Bash(gh repo view *), Bash(gh label *), Bash(git rev-parse *), Bash(git config --get *), Bash(cat *), Bash(ls *)
+allowed-tools: Read, Glob, Grep, Bash(gh issue *), Bash(gh repo view *), Bash(gh label *), Bash(gh api graphql *), Bash(git rev-parse *), Bash(git config --get *), Bash(cat *), Bash(ls *)
 ---
 
 Scope: $ARGUMENTS
@@ -22,7 +22,7 @@ Invoke the `creating-block-issues` skill. Two modes:
 
 Optional in Mode 2: `--notes <text>`, plus the same `--dry-run` / `--label` / `--no-label` flags as Mode 1.
 
-The skill attaches the dispatch label `swa-impl-block` to every issue it creates (auto-creating the label in the target repo if missing, color `#0E8A16`), and (Mode 1 only) surfaces a copy-pasteable "Blocked by" instruction block for the user to set GitHub-native Issue Dependencies via the right sidebar.
+The skill attaches the dispatch label `swa-impl-block` to every issue it creates (auto-creating the label in the target repo if missing, color `#0E8A16`), and (Mode 1 only) auto-writes Blocked-by relations parsed from the tasks.md dependency graph via the GraphQL `addBlockedBy` mutation. Manual click-through in the GitHub UI is now the fallback (only when `addBlockedBy` fails on an edge), not the default path.
 
 The dispatch label is the signal a downstream coder-agent daemon polls for. Additional project-specific labels (`ready`, priority, milestone) are NOT applied by this command — add them after with `gh issue edit <N> --add-label <name>` or via the UI.
 
