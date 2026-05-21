@@ -13,6 +13,7 @@ alwaysApply: true
 - **OOP** — Follow OOP approach and best practices.
 - **SOLID** — Enforce Single Responsibility; keep the others in mind when possible.
 - **No Magic** — Make everything explicit. No hidden behaviour or implicit transformations.
+- **No Number Without Measurement** — Performance figures in docs (gas, latency, throughput, proof sizes) MUST come from a real measurement: a test run, a profile, a fixture, or an upstream spec citation. Author-quoted "approximately X" without a source is a future-self trap; either remove the number or measure it first. Same for scaling claims ("supports 10k concurrent users"): unmeasured is hope, not fact.
 - **Small Steps** — Minimal changes, commit often.
 - **Use Libraries** — Prefer established libraries (ORMs, validators, parsers) over reimplementing features. Check the ecosystem before writing custom code.
 - **Backwards Compatibility** — Don't keep code for backwards-compatibility purposes.

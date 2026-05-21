@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
   "name": "coding-skills",
   "description": "Twelve engineering skills + five parallel-review agents + eight slash commands for Claude Code.",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "author": {
     "name": "swell-agents",
     "email": "swell_ai@pm.me",

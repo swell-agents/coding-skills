@@ -23,6 +23,7 @@ Always one requirement per cycle. If the cycle feels big, the requirement was to
 ## RED — write a failing test
 
 - **One test, one requirement.** Don't write a test suite up front; one test, fail, pass, refactor, next.
+- **Test names are claims, not labels.** Verify the fixture shape, input source, and assertion target match the name *before* the test goes green. A test named `test_decodesV4Quote` that loads a V5 fixture is silently broken: it passes but pins the wrong invariant, and the regression lands in the wrong place. Common causes: renamed a test and forgot to update the fixture; copy-pasted a fuzzy assertion from a sibling test without re-targeting it.
 - **Arrange-Act-Assert.** Three blocks, one assertion focus. Use `should_X_when_Y` naming where the framework allows it.
 - **Fail for the right reason.** Run the test before writing implementation. The failure message must point at *missing behaviour*, not at a typo, missing import, or fixture mistake. If it doesn't, the test is wrong.
 - **No premature edge cases.** Cover the happy path first. Edge cases (`null`, empty collections, boundary values, concurrent access, errors) get their own RED-GREEN-REFACTOR cycles.
