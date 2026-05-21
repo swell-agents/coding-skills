@@ -24,6 +24,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - `scripts/bootstrap.sh` — `write_agents_pointer` function, `AGENTS_MARKER` constant, and `agents_md_is_pointer` helper. No replacement; the script no longer generates or detects pointer templates.
 
+## [1.8.3] — 2026-05-21
+
+### Changed
+
+- **`skills/creating-block-issues/SKILL.md`** — every issue the skill creates now carries a dispatch label (default `swa-impl-block`). The label is the signal a downstream coder-agent daemon polls for; an unlabeled block-issue silently never gets picked up. The skill auto-creates the label in the target repo if missing (color `#0E8A16`, description `Spec Kit block-implement dispatch (coder-agent)`). New CLI overrides: `--label <name>` to use a different dispatch label name, `--no-label` to skip attachment entirely. Reverses the 1.8.2 vendor-neutral "no labels applied" stance: the dispatch label is a load-bearing part of the contract, not a project-specific style choice. Additional labels (`ready`, priority, milestone) remain the consuming project's PM-workflow concern.
+- `commands/block-issues.md` — surfaces the new `--label` / `--no-label` flags and documents the default dispatch label.
+- `.claude-plugin/plugin.json` — version 1.8.2 → 1.8.3.
+
 ## [1.8.2] — 2026-05-20
 
 ### Added
