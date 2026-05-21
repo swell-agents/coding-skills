@@ -26,10 +26,14 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [1.8.3] — 2026-05-21
 
+### Added
+
+- **`skills/creating-block-issues/SKILL.md`** — **subset mode** (Mode 2): create exactly one issue covering an arbitrary task subset (partial-block, cross-block, or cross-phase) via `--tasks T008,T025-T027,T048 --title "Implement Block C (FisherYates) — ..."`. Skill expands ID ranges, validates each ID against `tasks.md`, skips the heading-driven parse and dependency-graph surfacing (caller asserts the scope). Mode 2 body shape uses `**Scope:**` instead of `**Block:**`. Motivated by three real cases on `swell-storage-contracts` (#26/#27/#28) where the existing all-blocks mode couldn't produce the desired subset without restructuring `tasks.md` headings.
+
 ### Changed
 
 - **`skills/creating-block-issues/SKILL.md`** — every issue the skill creates now carries a dispatch label (default `swa-impl-block`). The label is the signal a downstream coder-agent daemon polls for; an unlabeled block-issue silently never gets picked up. The skill auto-creates the label in the target repo if missing (color `#0E8A16`, description `Spec Kit block-implement dispatch (coder-agent)`). New CLI overrides: `--label <name>` to use a different dispatch label name, `--no-label` to skip attachment entirely. Reverses the 1.8.2 vendor-neutral "no labels applied" stance: the dispatch label is a load-bearing part of the contract, not a project-specific style choice. Additional labels (`ready`, priority, milestone) remain the consuming project's PM-workflow concern.
-- `commands/block-issues.md` — surfaces the new `--label` / `--no-label` flags and documents the default dispatch label.
+- `commands/block-issues.md` — surfaces the new `--tasks` / `--title` / `--notes` subset-mode args alongside the `--label` / `--no-label` flags.
 - `.claude-plugin/plugin.json` — version 1.8.2 → 1.8.3.
 
 ## [1.8.2] — 2026-05-20
