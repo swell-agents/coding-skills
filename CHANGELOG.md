@@ -24,6 +24,20 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - `scripts/bootstrap.sh` — `write_agents_pointer` function, `AGENTS_MARKER` constant, and `agents_md_is_pointer` helper. No replacement; the script no longer generates or detects pointer templates.
 
+## [1.8.6] — 2026-05-21
+
+### Added
+
+- **`agents/acceptance-auditor.md`** — Spec Kit bookkeeping check (bidirectional). When the contract is resolved via the Spec Kit fallback path (1c), the auditor now captures the block's task list and each task's `[ ]`/`[X]` status, expands the issue body's `Tasks:` line into a flat T-ID set, and emits `Bookkeeping` findings (new Major-severity rule axis) for two failure modes:
+  - *Landed-but-unmarked* — diff modifies the file(s) named in a task's description but `tasks.md` still shows `- [ ] T0NN`. Per `coding-skills:implementing-blocks` TDD-fence and Spec Kit's `speckit-implement` SKILL, completed tasks MUST be flipped to `- [X]` in the same PR.
+  - *Marked-but-unimplemented* — `tasks.md` shows `- [X] T0NN` but the diff does not touch the file(s) named in the task description. Catches premature checkbox flips.
+  - Pure-prose tasks (ADRs, gate-runs, doc-only without a quoted file path) are treated as *implementation signal unknown* and deferred to the existing Drift / Partial / Overreach scope comparison; the bookkeeping rule does not over-fire on them.
+  - Driven by coder-agent daemon (aggelion) shipping `swa-impl-block` PRs that landed code cleanly but never flipped the `[ ]` → `[X]` checkboxes in `tasks.md`, leaving the spec doc out of sync with reality across multiple PRs. The TDD-fence rule was already in the subagent prompt at two layers (`implementing-blocks:95` and `speckit-implement:170`); the auditor now gates on it.
+
+### Changed
+
+- `.claude-plugin/plugin.json` — version 1.8.5 → 1.8.6.
+
 ## [1.8.5] — 2026-05-21
 
 ### Added
