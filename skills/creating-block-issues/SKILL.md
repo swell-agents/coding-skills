@@ -1,7 +1,7 @@
 ---
 name: creating-block-issues
 description: Generate one "Implement Block X" GitHub issue per Spec Kit tasks.md PR-stack block, with a minimal body pointing at tasks.md as the source of truth.
-allowed-tools: Read, Glob, Grep, Bash(gh issue *), Bash(gh repo view *), Bash(gh label *), Bash(git rev-parse *), Bash(git config --get *), Bash(cat *), Bash(ls *)
+allowed-tools: Read, Glob, Grep, Bash(gh issue *), Bash(gh repo view *), Bash(gh label *), Bash(gh api graphql *), Bash(git rev-parse *), Bash(git config --get *), Bash(cat *), Bash(ls *)
 ---
 
 ## When this skill applies
@@ -72,19 +72,45 @@ If a consuming repo wants a different dispatch label name (or none), it can over
 
    Omit `--label` only when `--no-label` was passed. Capture the returned issue number per block.
 
-8. **Surface dependency-setting instructions** (no auto-write). Parse the "Block Dependency Graph" or "Dependencies & Execution Order" section of tasks.md; output a copy-pasteable instruction block for the user to set "Blocked by" relations via GitHub's UI:
+8. **Set Blocked-by relations via GraphQL** (Mode 1 only; skip in Mode 2 since custom subsets have no pre-known dep graph). Parse the "Block Dependency Graph" or "Dependencies & Execution Order" section of tasks.md to extract `{blocked_issue: [blocking_issues...]}` pairs. Then:
 
-   ```
-   Set the following Blocked-by relations in GitHub
-   (right sidebar → Development → Dependencies → Blocked by):
+   a. **Fetch node IDs** for every created issue in one batched query:
 
-   - Issue #<B>: blocked by #<A>
-   - Issue #<D>: blocked by #<B> and #<C>
-   - Issue #<E>: blocked by #<D>
-   - ...
-   ```
+      ```bash
+      gh api graphql -f query='
+        { repository(owner: "<owner>", name: "<repo>") {
+            issue26: issue(number: <N1>) { id }
+            issue27: issue(number: <N2>) { id }
+            ...
+          }
+        }' --jq '.data.repository'
+      ```
 
-   The skill does NOT call `gh api` to set the dependencies — as of authoring, GitHub's issue-dependency API is preview-only and `gh` CLI has no stable verb. Manual one-time setup is the documented contract.
+   b. **Fire `addBlockedBy` mutation per dep edge** (issue node IDs, not numbers):
+
+      ```bash
+      gh api graphql -f query='
+        mutation { addBlockedBy(input: {
+          issueId: "<blocked_node_id>",
+          blockingIssueId: "<blocking_node_id>"
+        }) { clientMutationId } }'
+      ```
+
+   c. **Error handling**: if a single edge fails (already-exists, insufficient scope, network), report the specific failure and continue with remaining edges; do NOT abort the run. The failing edges fall back to the human-instructions block below. Common failure modes:
+      - `Resource not accessible by integration` → token lacks `issues:write` scope. Fall back to printing the human-readable Blocked-by instructions.
+      - `An error occurred while validating the input: issue is already blocked by ...` → idempotent no-op; treat as success.
+
+   d. **Fallback for unset / failed edges** (only when at least one edge failed in step (b/c)): print the copy-pasteable instruction block so the user can finish via UI:
+
+      ```
+      Could not auto-set the following Blocked-by relations
+      (right sidebar → Development → Dependencies → Blocked by):
+
+        - Issue #<B>: blocked by #<A>
+        - Issue #<D>: blocked by #<B> and #<C>
+      ```
+
+      In the all-success path, skip this block entirely.
 
 9. **Final report**:
 
@@ -95,9 +121,11 @@ If a consuming repo wants a different dispatch label name (or none), it can over
      #<B> Implement Block B — <name>
      ...
 
-   Next steps:
-     1. Apply any additional project-specific labels (`ready`, priority, milestone) via `gh issue edit <N> --add-label <name>` or the GitHub UI.
-     2. Set Blocked-by relations per the instruction block above.
+   Blocked-by relations set: K of M edges via addBlockedBy.
+   (Or: "All M edges set successfully." / "K edges fell back to manual; see above.")
+
+   Next step:
+     - Apply any additional project-specific labels (`ready`, priority, milestone) via `gh issue edit <N> --add-label <name>` or the GitHub UI.
    ```
 
 ## Activation modes
@@ -150,7 +178,8 @@ Mode-2 differences from Mode 1's execution flow:
 - **NEVER** overwrite existing block-issues. If step 5 finds a match, abort and report.
 - **NEVER** include the constitution, scars, dispatch boilerplate, or per-task acceptance criteria in the body. The template is the contract; deviation creates drift between issue and `tasks.md` / `CLAUDE.md`.
 - **NEVER** attach labels other than the one resolved in step 6 (default `swa-impl-block`, or whatever the caller passed via `--label`). Additional project-specific labels are the consuming project's PM-workflow concern — they go in via `gh issue edit` afterward.
-- Echo every state-changing `gh issue create` / `gh label create` invocation back to the user before running it.
+- Echo every state-changing `gh issue create` / `gh label create` / `addBlockedBy` invocation back to the user before running it.
+- **NEVER** silently drop a dep edge. If `addBlockedBy` fails for any edge, report it explicitly and surface that edge in the manual-fallback block.
 
 ## Anti-patterns
 
