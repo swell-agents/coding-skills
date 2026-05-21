@@ -102,13 +102,47 @@ If a consuming repo wants a different dispatch label name (or none), it can over
 
 ## Activation modes
 
-Single mode: **create-block-issues**. Argument shape (passed via the wrapping command):
+Two modes:
+
+### Mode 1: **all-blocks** (default)
+
+Heading-driven. Creates one issue per `#### Block <X> — <name>` in `tasks.md`. Argument shape:
 
 - **Empty** → use the active feature from `.specify/feature.json`. Attaches the default `swa-impl-block` label.
 - **`<feature-dir>`** (e.g. `001-uptime-settlement`) → override the active-feature resolution.
 - **`--dry-run`** → parse tasks.md and render the would-be issue bodies without calling `gh`. Always echo the parsed block list + dependency graph + resolved label in dry-run mode.
 - **`--label <name>`** → override the default dispatch label name.
 - **`--no-label`** → skip label attachment entirely (issues created bare).
+
+### Mode 2: **subset** (single issue, custom scope)
+
+Task-ID-driven. Creates exactly **one** issue covering an arbitrary subset of tasks — partial-block (e.g. Block A's SwellParameters half), cross-block (e.g. Fisher-Yates spanning Blocks B + C), or cross-phase (e.g. Phase 1 + Phase 2 + a Block A subset). The skill does NOT parse `####` headings in this mode — the caller asserts the scope.
+
+Triggered by the presence of `--tasks`. Required args:
+
+- **`--tasks <ids>`** → comma-separated task IDs with range support: `T008,T025-T027,T048`. Skill expands ranges (`T025-T027` → `T025,T026,T027`) and validates each ID exists in tasks.md; aborts with the missing IDs if any.
+- **`--title <text>`** → the GitHub issue title. Convention: `Implement Block <X> (<subset name>) — <description>` so existing-issue search still works. Examples: `Implement Block A (SwellParameters) — epochEmission extension`, `Implement Block C (FisherYates) — Knuth shuffle library`.
+
+Optional args:
+
+- **`--notes <text>`** → free-form Notes line in the body. Use for human overrides not derivable from tasks.md (e.g. "MetaCertificateCodec deferred", "no upgrade ceremony per pre-deployment rule").
+- **`--dry-run`** / **`--label <name>`** / **`--no-label`** → same semantics as Mode 1.
+
+Mode-2 body shape:
+
+```markdown
+- **Spec:** `specs/<NNN>-<feature>/tasks.md`
+- **Scope:** <verbatim from --title, with the "Implement " prefix stripped>
+- **Tasks:** <expanded comma-separated task IDs from --tasks>
+- **Notes:** <--notes value, omitted if absent>
+```
+
+Mode-2 differences from Mode 1's execution flow:
+
+- Skip step 3's heading parsing; use the explicit `--tasks` list.
+- Step 5 existing-issue check uses `--title` exact match instead of the `Implement Block <X>` pattern.
+- Skip step 8's dependency graph (the caller knows their cross-issue deps; the skill can't infer them from a custom subset).
+- Final report shows a single issue, not a list.
 
 ## Safety rules
 
