@@ -10,7 +10,7 @@ The target repo is a Spec Kit project: `.specify/` exists at repo root, and at l
 
 This skill creates **one tracking issue per Block**, not per task. No epic, no per-task issues. Whoever picks up the issue (a human assignee or an automation pipeline that polls GitHub) runs the block-implement loop. The issue body is intentionally minimal (3 short bullets) and points at `tasks.md` as the source of truth; constitution, scars, conventions, and per-task acceptance criteria are NOT duplicated per issue (the assignee reads them from the file at implementation time).
 
-If the repo is not a Spec Kit project, or `tasks.md` does not use the `#### Block <X>` structure, use [`managing-github-issues`](../managing-github-issues/SKILL.md) `create-issues` mode for per-task epic + sub-issues instead, or fall back to manual `gh issue create`.
+If the repo is not a Spec Kit project, or `tasks.md` does not use the `#### Block <X>` structure, fall back to manual `gh issue create` per the project's own issue conventions.
 
 ## Issue template (load-bearing)
 
@@ -183,7 +183,7 @@ Mode-2 differences from Mode 1's execution flow:
 
 ## Anti-patterns
 
-- **One issue per task.** Wrong granularity for a PR-stack project — generates 50-100 issues for a single feature, swamps the project board, and forces the assignee to thread per-task issues into a per-Block PR anyway. Use `managing-github-issues` `create-issues` only if the project does NOT use Spec Kit blocks.
+- **One issue per task.** Wrong granularity for a PR-stack project — generates 50-100 issues for a single feature, swamps the project board, and forces the assignee to thread per-task issues into a per-Block PR anyway. For non-Spec-Kit projects, drive issue creation manually with `gh issue create`.
 - **Epic issue bundling all blocks.** Adds a maintenance burden (the epic body has to be updated as blocks close) without giving a richer signal than the native GitHub Project view + Issue Dependencies graph already provide.
 - **Copying `CLAUDE.md` / constitution / scars into the body.** Source of truth lives in the file, not the issue. Both humans and any automation read `tasks.md` at implementation time; the issue body just points at it.
 - **Cross-block dependency lines in the body** (e.g. "Blocked by: Block A"). Use GitHub's native Issue Dependencies feature instead — both humans and automation consume it from the sidebar. Body-field links drift when issues close.
@@ -192,4 +192,3 @@ Mode-2 differences from Mode 1's execution flow:
 ## See also
 
 - [`implementing-blocks`](../implementing-blocks/SKILL.md) — the skill that consumes these issues (TDD + review + draft PR + CI fix loop, one Block per invocation).
-- [`managing-github-issues`](../managing-github-issues/SKILL.md) — per-task / epic issue creation for non-Spec-Kit projects, plus the project-wide label / dependency tracking conventions.

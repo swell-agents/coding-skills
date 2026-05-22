@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "coding-skills",
-      "description": "Ten canonical Anthropic Agent Skills for software engineering — running-tdd-cycles, reviewing-changes, designing-architecture, managing-github-issues, committing-changes, plus per-language conventions for Python, Go, Solidity, shell, and engineering-philosophy.",
+      "description": "Eleven canonical Anthropic Agent Skills for software engineering — running-tdd-cycles, reviewing-changes, designing-architecture, creating-block-issues, implementing-blocks, committing-changes, plus per-language conventions for Python, Go, Solidity, shell, and engineering-philosophy.",
       "author": {
         "name": "swell-agents",
         "email": "swell_ai@pm.me",
@@ -31,7 +31,6 @@
         "go",
         "solidity",
         "shell",
-        "github-issues",
         "engineering-philosophy"
       ]
     }
