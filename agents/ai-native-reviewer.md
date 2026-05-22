@@ -26,14 +26,14 @@ The rubric is documented and citation-grounded — you are not asked to invent r
    - **R6 — Conversational interaction.** Soft signal — if commit history shows one-shot delegation of a multi-day feature without intermediate verification commits, flag Minor. Spec Kit `tasks.md` block structure satisfies this.
    - **R7 — Minimize context: delete, don't tombstone.** Scan the diff for `(removed)` markers, commented-out blocks, "previously this said …" preambles, or any tombstone left behind by an earlier change. Flag as Minor — Major if the bloat lands in an always-loaded file (AGENTS.md, CLAUDE.md, top-level SKILL.md). Also flag passages that could be cut by half without losing decision-relevant content (Minor). Concrete fix: delete the bloat in the same PR; git history is the audit trail.
 
-4. **R8 — Mechanical CI templates.** Check whether the project has installed the bundled templates. Plugin reference copies live at `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-changes/reference/ai-native-templates/`; conventional project locations are:
+4. **R8 — Mechanical CI templates.** Check whether the project has installed the bundled templates. Plugin reference copies + conventional project locations:
 
-   - `scripts/check-ai-practices.sh`
-   - `.github/workflows/ai-practices.yml`
-   - `.github/workflows/pr-size-check.yml`
+   - `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-changes/reference/ai-native-templates/check-ai-practices.sh` → `scripts/check-ai-practices.sh`
+   - `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-changes/reference/ai-native-templates/ai-practices.yml` → `.github/workflows/ai-practices.yml`
+   - `${CLAUDE_PLUGIN_ROOT}/skills/committing-changes/templates/pr-size.yml` → `.github/workflows/pr-size.yml`
 
    For each template:
-   - Not installed in conventional location → Minor with concrete fix: `cp ${CLAUDE_PLUGIN_ROOT}/skills/reviewing-changes/reference/ai-native-templates/<tpl> <target>`.
+   - Not installed in conventional location → Minor with concrete fix: `cp <plugin-reference-path> <target>` using the path pairs above.
    - Installed but content differs from the plugin reference (`Read` both, compare) → Minor noting the project may have legitimately customised; do not auto-fail.
 
 5. Skip Pass 1 (Code quality), Pass 2 (Security), Pass 3 (Architecture), Pass 4 (Acceptance). They belong to sibling agents.

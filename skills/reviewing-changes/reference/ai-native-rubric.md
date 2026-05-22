@@ -80,9 +80,9 @@ Empirical: every line in AGENTS.md / CLAUDE.md / skill files / agent definitions
 
 A small subset of this rubric is deterministic and cheap: it should not depend on a per-PR LLM agent. The `coding-skills` plugin ships three minimal templates covering the truly-mechanical parts of R2, R3, R5:
 
-- `check-ai-practices.sh` — three checks: (a) instruction file (AGENTS.md / CLAUDE.md / .cursor/rules/) exists at repo root [R2]; (b) mock-framework imports detected in `*_test.go` [R3, pre-screen for judgement pass]; (c) PR diff size threshold [R5].
-- `ai-practices.yml` — GitHub Action wrapping `check-ai-practices.sh` on PR.
-- `pr-size-check.yml` — GitHub Action that fails the PR if the diff exceeds 1000 lines without a `large-pr-ok` label override [R5].
+- `skills/reviewing-changes/reference/ai-native-templates/check-ai-practices.sh` — three checks: (a) instruction file (AGENTS.md / CLAUDE.md / .cursor/rules/) exists at repo root [R2]; (b) mock-framework imports detected in `*_test.go` [R3, pre-screen for judgement pass]; (c) PR diff size threshold [R5].
+- `skills/reviewing-changes/reference/ai-native-templates/ai-practices.yml` — GitHub Action wrapping `check-ai-practices.sh` on PR.
+- `skills/committing-changes/templates/pr-size.yml` — GitHub Action using `codelytv/pr-size-labeler` that labels the PR `size/xs..size/xl` and fails on `size/xl` (>1000 changed lines, excluding tests, docs, lockfiles, vendored/generated files) [R5].
 
 Agent verifies template installation by comparing the plugin's reference copy to the project's installed copy via `Read` + content diff.
 

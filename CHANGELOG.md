@@ -36,10 +36,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - `agents/ai-native-reviewer.md`, `skills/reviewing-changes/SKILL.md` — updated to match the new rubric (drop logging check, gate R4 on Spec-Kit detection, weaken R2 to presence-only, enforce R7 minimize-context findings).
 - **Bootstrap is patch-only.** `scripts/bootstrap.sh` no longer creates stub files. `CLAUDE.md` present → append engineering-skills block (idempotent via `<!-- coding-skills-bootstrap -->`). `.cursorrules` present → same. `AGENTS.md` is never created and never modified. If no instruction file exists, the script prints a hint and exits 0. Removed the `write_agents_pointer` function, the `AGENTS_MARKER` constant, and the canonical-pointer template — this reverses the Claude-first opinion introduced earlier in this Unreleased cycle and aligns the script with the weakened R2.
 - `commands/bootstrap.md`, `README.md`, `INDEX.md` — documented the patch-only behavior.
+- **R8 single canonical PR-size template.** `skills/reviewing-changes/reference/ai-native-rubric.md` and `agents/ai-native-reviewer.md` now point R5/R8 PR-size enforcement at `skills/committing-changes/templates/pr-size.yml` (labeler-based, path-ignores tests / docs / lockfiles / vendored). The hand-rolled `pr-size-check.yml` template under `reviewing-changes/reference/ai-native-templates/` is gone. Rationale: the hand-rolled gate counted every changed byte including `test/`, `docs/`, `lib/**` submodules, and lockfiles, contradicting the rubric's own "excluding tests/docs/lockfiles" framing; consumers that installed both ended up with two contradictory PR-size jobs (`swell-storage-contracts` PR #44 hit exactly this — 1059 changed lines failed `pr-size-check.yml` while `pr-size.yml` correctly tagged it `size/m` after path-ignores). One canonical gate per concern.
 
 ### Removed
 
 - `scripts/bootstrap.sh` — `write_agents_pointer` function, `AGENTS_MARKER` constant, and `agents_md_is_pointer` helper. No replacement; the script no longer generates or detects pointer templates.
+- `skills/reviewing-changes/reference/ai-native-templates/pr-size-check.yml` — duplicate of the labeler-based gate; see the R8 single-canonical-template note above.
 
 ## [1.8.7] — 2026-05-22
 
