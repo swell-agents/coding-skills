@@ -13,7 +13,6 @@ Two layers: workflow skills (what to do), rule skills (conventions to apply). A 
 | [running-tdd-cycles](skills/running-tdd-cycles/) | Strict red-green-refactor. User asks for TDD, a failing test first, or names a phase. |
 | [reviewing-changes](skills/reviewing-changes/) | Layered code + security + architecture review on a diff or PR. |
 | [designing-architecture](skills/designing-architecture/) | Pre-implementation design — components, libraries, data flow, schema. |
-| [managing-github-issues](skills/managing-github-issues/) | Spec-driven decomposition into dependency-linked GitHub issues. |
 | [creating-block-issues](skills/creating-block-issues/) | Spec Kit project — one "Implement Block X" GitHub issue per `tasks.md` PR-stack block (minimal body, dispatch label `swa-impl-block`). |
 | [committing-changes](skills/committing-changes/) | Feature branch + PR + commit-message hooks discipline. |
 | [implementing-blocks](skills/implementing-blocks/) | Spec Kit project — implement one PR-stack block end-to-end (TDD + review + push + CI fix loop). |
@@ -56,7 +55,6 @@ Skills are the source of truth and run in any harness. Claude Code consumers als
 | [/coding-skills:review](commands/review.md) | Launches the three review agents in parallel and aggregates findings |
 | [/coding-skills:commit](commands/commit.md) | `committing-changes` |
 | [/coding-skills:tdd](commands/tdd.md) | `running-tdd-cycles` |
-| [/coding-skills:pm](commands/pm.md) | `managing-github-issues` |
 | [/coding-skills:block-issues](commands/block-issues.md) | `creating-block-issues` — one "Implement Block X" GitHub issue per Spec Kit `tasks.md` PR-stack block (minimal body, dispatch label `swa-impl-block`) |
 | [/coding-skills:design](commands/design.md) | `designing-architecture` |
 | [/coding-skills:block-implement](commands/block-implement.md) | `implementing-blocks` — one Spec Kit block end-to-end including push + draft PR + CI loop |

@@ -221,7 +221,7 @@ The human reviews the PR, decides whether the diff is mergeable, and clicks merg
 - **Not multi-block.** One block per invocation.
 - **Not multi-feature.** Operates on the active feature only.
 - **Not a PR merger.** Opens a draft PR; humans merge.
-- **Not a [`managing-github-issues`](../managing-github-issues/SKILL.md) replacement.** GitHub issue lifecycle is `managing-github-issues`' job; this skill is offline-task-list-driven and pushes a PR per block.
+- **Not a GitHub issue lifecycle manager.** This skill is offline-task-list-driven and pushes a PR per block; consuming issues is the job of upstream tools.
 
 ## Cross-references
 

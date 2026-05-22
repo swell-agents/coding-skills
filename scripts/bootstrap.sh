@@ -45,7 +45,7 @@ Per-language conventions auto-activate when the file matches:
 
 Workflow skills: `coding-skills:running-tdd-cycles`,
 `coding-skills:reviewing-changes`, `coding-skills:designing-architecture`,
-`coding-skills:managing-github-issues`, `coding-skills:committing-changes`.
+`coding-skills:committing-changes`.
 
 See https://github.com/swell-agents/coding-skills for the full skill set.
 EOF

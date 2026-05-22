@@ -8,6 +8,23 @@ All notable changes to this repository will be documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] — 2026-05-22
+
+### Removed (BREAKING)
+
+- **`managing-github-issues` skill removed.** The full skill directory and its helper scripts (`create_labels.sh`, `check_blockers.sh`, `list_ready.sh`) plus reference docs are gone. Rationale: the skill drove a project-management workflow (plan / start / next / advance / status / create-issues) that the consuming projects do not use; its metadata bloated the session skill-list for every invocation on every project. Migration: drive issue lifecycle through native `gh issue` commands or `creating-block-issues` for Spec Kit projects; consult prior commit `7b8abd6` for the deleted procedure if needed.
+- **`/coding-skills:pm` slash command removed.** Wrapped the removed skill. Callers must switch to direct `gh` usage.
+- **`managing-github-issues` keyword removed from `plugin.json` and `marketplace.json`.** Also `github-issues` keyword removed from both since it tracked the deleted skill.
+- **`tests/manual-scenarios/managing-github-issues.md` removed.**
+
+### Changed
+
+- `.claude-plugin/plugin.json` — version bumped to `2.0.0` (major bump for the breaking removal). Description now reads "Eleven engineering skills + five parallel-review agents + seven slash commands" (was twelve / eight).
+- `.claude-plugin/marketplace.json` — description updated to drop `managing-github-issues` from the highlight list.
+- `README.md`, `INDEX.md` — slash-command and skill tables updated; counts adjusted to 11 skills / 7 commands.
+- `scripts/bootstrap.sh` — `coding-skills:managing-github-issues` removed from the workflow-skills line appended to consuming projects' `CLAUDE.md`.
+- `skills/creating-block-issues/SKILL.md`, `skills/implementing-blocks/SKILL.md` — cross-references to `managing-github-issues` removed or rewritten to point at native `gh issue` usage.
+
 ## [Unreleased]
 
 ### Changed
