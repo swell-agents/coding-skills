@@ -51,7 +51,16 @@ fi
 # R5 — PR diff size
 #
 if git rev-parse --verify "$PR_BASE" >/dev/null 2>&1; then
-  diff_lines="$(git diff --shortstat "$PR_BASE...HEAD" 2>/dev/null | grep -oE '[0-9]+ insertion|[0-9]+ deletion' | grep -oE '[0-9]+' | awk '{s+=$1} END {print s+0}')"
+  # Capture shortstat first so an empty diff (e.g. running on `main` itself
+  # via the `push: branches: [main]` trigger) does not collapse the grep
+  # pipeline under `set -euo pipefail` (the first grep would exit 1 on
+  # empty input and kill the script before R5 ever prints).
+  shortstat="$(git diff --shortstat "$PR_BASE...HEAD" 2>/dev/null || true)"
+  if [[ -z "$shortstat" ]]; then
+    diff_lines=0
+  else
+    diff_lines="$(echo "$shortstat" | grep -oE '[0-9]+ insertion|[0-9]+ deletion' | grep -oE '[0-9]+' | awk '{s+=$1} END {print s+0}')"
+  fi
   if [[ "$diff_lines" -gt "$DIFF_LIMIT" ]]; then
     if [[ "${PR_LABELS:-}" == *"$LARGE_PR_LABEL"* ]]; then
       echo "[R5 SKIP] Diff $diff_lines lines exceeds $DIFF_LIMIT but '$LARGE_PR_LABEL' label is set."

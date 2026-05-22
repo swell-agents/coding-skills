@@ -24,6 +24,16 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 - `scripts/bootstrap.sh` — `write_agents_pointer` function, `AGENTS_MARKER` constant, and `agents_md_is_pointer` helper. No replacement; the script no longer generates or detects pointer templates.
 
+## [1.8.7] — 2026-05-22
+
+### Fixed
+
+- **`skills/reviewing-changes/reference/ai-native-templates/check-ai-practices.sh`** — R5 diff-size check no longer kills the script when run with an empty diff. The CI workflow at `.github/workflows/test.yml` triggered by `push: branches: [main]` re-runs the script on the just-merged commit; in that context `PR_BASE` defaults to `main`, `HEAD == main`, and `git diff --shortstat main...HEAD` is empty. The original R5 pipeline ran the empty output through `grep -oE '[0-9]+ insertion|...'`, which exited 1 on empty input; under `set -euo pipefail` this collapsed the script after R2/R3 PASS and the CI failed with "Process completed with exit code 1" before R5 ever printed. Fix: capture `git diff --shortstat` output first, treat empty as `diff_lines=0` explicitly, run the grep pipeline only on non-empty input. Semantically equivalent ("no diff = 0 lines"); now prints `[R5 PASS] PR diff 0 lines (limit: 1000)` on main HEAD. First found in `swell-storage-contracts` ([PR #45](https://github.com/swell-agents/swell-storage-contracts/pull/45)) where main CI had been red for 5+ consecutive runs.
+
+### Changed
+
+- `.claude-plugin/plugin.json` — version 1.8.6 → 1.8.7.
+
 ## [1.8.6] — 2026-05-21
 
 ### Added
