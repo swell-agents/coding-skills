@@ -27,6 +27,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+
+- **`engineering-philosophy` principles tightened and extended.** Three Principles-list entries:
+  - `Write Less`: if you can avoid writing the code or the comment, don't; a comment earns its place only when it says what the code cannot (a why, an invariant, a magic-number derivation), never when it restates the code. Complements `reviewing-changes` R1 (comments convey WHY, not WHAT).
+  - `Stay In Scope`: change only what the task requires; off-task fixes / reformats / renames earn their own PR. Also added to the `reviewing-changes` and `running-tdd-cycles` application weights.
+  - `Specs Lead, Code Follows`: spec / plan / interface contracts are the source of truth; on a code-vs-spec contradiction, stop and surface it rather than rewriting the spec to match.
+
 ### Changed
 
 - **Review rubric** (`skills/reviewing-changes/reference/ai-native-rubric.md`) — three scope updates driven by reviewer over-strictness:
