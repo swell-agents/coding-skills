@@ -27,8 +27,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+
+- **`solidity-conventions` library guidance.** New `## Libraries` section: default to OpenZeppelin (standards / security primitives) and Solady (gas-optimized hot paths) over hand-rolling; when neither fits, search [bkrem/awesome-solidity](https://github.com/bkrem/awesome-solidity) (general libraries, tooling, style) and [crytic/awesome-ethereum-security](https://github.com/crytic/awesome-ethereum-security) (security tooling, used during the security pass) before writing from scratch.
+
 ### Changed
 
+- `.claude-plugin/plugin.json`: version bumped `2.0.0` → `2.1.0` (minor: net-new library-selection guidance).
 - **Review rubric** (`skills/reviewing-changes/reference/ai-native-rubric.md`) — three scope updates driven by reviewer over-strictness:
   - **R2 weakened.** Pass condition is now "at least one of AGENTS.md / CLAUDE.md / `.cursor/rules/` exists at repo root." The section-structure checklist (Build/Run, Test, Architecture, Conventions, Never-do) is downgraded to guidance — content can legitimately live in linked skills, ADRs, or per-language convention files.
   - **R4 narrowed.** ADR requirement now applies only to projects using Spec Kit (detected via `specs/` with `plan.md`/`tasks.md`, or `.specify/`). Non-Spec-Kit projects record R4 as N/A.
