@@ -9,7 +9,7 @@ alwaysApply: true
 - **Architecture** — Class responsibilities defined in the project's architecture map (often `docs/architecture.md`).
 - **KISS** — Simple solutions over complex ones.
 - **YAGNI** — Build only what's needed now. Less code is better.
-- **Write Less** - If you can avoid writing the code or the comment, don't. The smallest change that solves the problem wins; a comment earns its place only when it says what the code cannot (a why, an invariant, a magic-number derivation), never when it restates the code.
+- **Write Less** - If you can avoid writing the code or the comment, don't. A comment earns its place only when it says what the code cannot: a why, an invariant, a magic-number derivation, never a restatement. **Default every comment to one line.** Multi-line is allowed ONLY for a byte-layout, a derivation, or a non-obvious why that needs the room. This covers every comment, source, config, and CI YAML alike; before committing, re-read each comment you added and cut it to one line or delete it.
 - **DRY** — Single source of truth. Never copy-paste.
 - **OOP** — Follow OOP approach and best practices.
 - **SOLID** — Enforce Single Responsibility; keep the others in mind when possible.

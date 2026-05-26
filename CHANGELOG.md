@@ -8,6 +8,12 @@ All notable changes to this repository will be documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] - 2026-05-26
+
+### Changed
+
+- **`engineering-philosophy` -> Write Less, hardened.** Turned the soft principle into a concrete default: every comment defaults to one line, multi-line allowed only for a byte-layout, a derivation, or a non-obvious why, with a pre-commit "re-read each comment and cut to one line or delete" step. States explicitly that it applies to all comments (source, config, CI YAML), not just source files. No new skill, agent, or command; wording-only.
+
 ## [2.0.0] — 2026-05-22
 
 ### Removed (BREAKING)
