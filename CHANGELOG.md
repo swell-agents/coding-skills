@@ -8,6 +8,22 @@ All notable changes to this repository will be documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.2] - 2026-05-27
+
+### Added
+
+- **`solidity-conventions` library guidance.** New `## Libraries` section: default to OpenZeppelin (standards / security primitives) and Solady (gas-optimized hot paths) over hand-rolling; when neither fits, search [bkrem/awesome-solidity](https://github.com/bkrem/awesome-solidity) (general libraries, tooling, style) and [crytic/awesome-ethereum-security](https://github.com/crytic/awesome-ethereum-security) (security tooling, used during the security pass) before writing from scratch.
+
+### Changed
+
+- `.claude-plugin/plugin.json`: version bumped `2.1.1` -> `2.1.2`.
+
+## [2.1.1] - 2026-05-26
+
+### Changed
+
+- **`engineering-philosophy` -> Write Less, hardened.** Turned the soft principle into a concrete default: every comment defaults to one line, multi-line allowed only for a byte-layout, a derivation, or a non-obvious why, with a pre-commit "re-read each comment and cut to one line or delete" step. States explicitly that it applies to all comments (source, config, CI YAML), not just source files. No new skill, agent, or command; wording-only.
+
 ## [2.0.0] — 2026-05-22
 
 ### Removed (BREAKING)
@@ -29,7 +45,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ### Added
 
-- **`solidity-conventions` library guidance.** New `## Libraries` section: default to OpenZeppelin (standards / security primitives) and Solady (gas-optimized hot paths) over hand-rolling; when neither fits, search [bkrem/awesome-solidity](https://github.com/bkrem/awesome-solidity) (general libraries, tooling, style) and [crytic/awesome-ethereum-security](https://github.com/crytic/awesome-ethereum-security) (security tooling, used during the security pass) before writing from scratch.
+- **`engineering-philosophy` principles tightened and extended.** Three Principles-list entries:
+  - `Write Less`: if you can avoid writing the code or the comment, don't; a comment earns its place only when it says what the code cannot (a why, an invariant, a magic-number derivation), never when it restates the code. Complements `reviewing-changes` R1 (comments convey WHY, not WHAT).
+  - `Stay In Scope`: change only what the task requires; off-task fixes / reformats / renames earn their own PR. Also added to the `reviewing-changes` and `running-tdd-cycles` application weights.
+  - `Specs Lead, Code Follows`: spec / plan / interface contracts are the source of truth; on a code-vs-spec contradiction, stop and surface it rather than rewriting the spec to match.
 
 ### Changed
 
