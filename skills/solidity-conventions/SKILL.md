@@ -16,6 +16,18 @@ If the repo doesn't define its own tooling, use:
 - **GitHub Actions** — CI/CD, separate `build_and_test` and `linter` jobs
 - **Husky** — `pre-commit` hook runs `npm run lint:check`
 
+## Libraries
+
+Default to audited, widely-used libraries over hand-rolling your own:
+
+- **OpenZeppelin**: standards and security primitives (ERC20/721/1155, `AccessControl`, `ReentrancyGuard`, UUPS/transparent proxies).
+- **Solady**: gas-optimized drop-in equivalents for hot paths.
+
+When neither covers the need, search these curated lists before writing from scratch:
+
+- [bkrem/awesome-solidity](https://github.com/bkrem/awesome-solidity): the canonical Solidity list (libraries, tooling, style guides).
+- [crytic/awesome-ethereum-security](https://github.com/crytic/awesome-ethereum-security): security tooling and audited components; reach for it during the security pass.
+
 ## Testing
 
 - **Forge tests only** — `forge test -vvv`. No Hardhat/Truffle unless the repo already uses them.
