@@ -31,6 +31,7 @@ gh pr diff <N>
 Check, in order:
 
 - **Philosophy violations** — over-engineering (KISS, YAGNI), duplication (DRY), magic behaviour (No Magic), copy-paste-modified blocks.
+- **Redundant entity & local-pattern reuse**: when the diff adds a function, accessor, or code path the repo already provides (an auto-generated getter, a wider getter that subsumes a narrower one, an idiom a sibling file implements), reuse the existing form instead of a second variant. DRY and YAGNI span the whole repo, not just this diff.
 - **SOLID violations** — Single Responsibility first; flag classes/files that grew a second responsibility.
 - **Naming, readability, complexity** — function lengths, parameter lists, deeply nested conditionals, clever one-liners that hide intent.
 - **Test coverage** — was the change tested? If TDD discipline applied, was the failing test committed first?
