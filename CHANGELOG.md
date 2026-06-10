@@ -8,6 +8,16 @@ All notable changes to this repository will be documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.4] - 2026-06-10
+
+### Added
+
+- **`creating-block-issues` What line.** The block-issue body template (both modes) gains a mandatory `**What:**` line: a 1-2 sentence plain-language summary of what the block builds, composed from the user story's Goal line and the block's task texts. Hard cap of two sentences, no FR/SC/DI identifiers; a scanning hook for humans and daemon logs, not a second spec (new anti-pattern entry). `commands/block-issues.md` documents the line.
+
+### Changed
+
+- `.claude-plugin/plugin.json`: version bumped `2.1.3` -> `2.1.4`.
+
 ## [2.1.3] - 2026-05-27
 
 ### Added
