@@ -22,6 +22,8 @@ Invoke the `creating-block-issues` skill. Two modes:
 
 Optional in Mode 2: `--notes <text>`, plus the same `--dry-run` / `--label` / `--no-label` flags as Mode 1.
 
+Every issue body carries a **What** line: a 1-2 sentence summary of what the block (or subset) builds, composed from the user story's Goal line and the task texts — a scanning hook, not a second spec.
+
 The skill attaches the dispatch label `swa-impl-block` to every issue it creates (auto-creating the label in the target repo if missing, color `#0E8A16`), and (Mode 1 only) auto-writes Blocked-by relations parsed from the tasks.md dependency graph via the GraphQL `addBlockedBy` mutation. Manual click-through in the GitHub UI is now the fallback (only when `addBlockedBy` fails on an edge), not the default path.
 
 The dispatch label is the signal a downstream coder-agent daemon polls for. Additional project-specific labels (`ready`, priority, milestone) are NOT applied by this command — add them after with `gh issue edit <N> --add-label <name>` or via the UI.

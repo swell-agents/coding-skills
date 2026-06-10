@@ -8,7 +8,7 @@ allowed-tools: Read, Glob, Grep, Bash(gh issue *), Bash(gh repo view *), Bash(gh
 
 The target repo is a Spec Kit project: `.specify/` exists at repo root, and at least one `specs/<NNN>-<feature>/tasks.md` is present with `#### Block <X> — <name>` PR-stack headings (the structure produced by `/coding-skills:speckit-tasks` and aligned with [`implementing-blocks`](../implementing-blocks/SKILL.md)). The repo has a GitHub `origin` remote.
 
-This skill creates **one tracking issue per Block**, not per task. No epic, no per-task issues. Whoever picks up the issue (a human assignee or an automation pipeline that polls GitHub) runs the block-implement loop. The issue body is intentionally minimal (3 short bullets) and points at `tasks.md` as the source of truth; constitution, scars, conventions, and per-task acceptance criteria are NOT duplicated per issue (the assignee reads them from the file at implementation time).
+This skill creates **one tracking issue per Block**, not per task. No epic, no per-task issues. Whoever picks up the issue (a human assignee or an automation pipeline that polls GitHub) runs the block-implement loop. The issue body is intentionally minimal (4 short bullets: pointer, heading, a 1-2 sentence summary, task IDs) and points at `tasks.md` as the source of truth; constitution, scars, conventions, and per-task acceptance criteria are NOT duplicated per issue (the assignee reads them from the file at implementation time).
 
 If the repo is not a Spec Kit project, or `tasks.md` does not use the `#### Block <X>` structure, fall back to manual `gh issue create` per the project's own issue conventions.
 
@@ -19,11 +19,12 @@ Every block-issue body MUST match this exact shape — keeping the body minimal 
 ```markdown
 - **Spec:** `specs/<NNN>-<feature>/tasks.md`
 - **Block:** Block <X> — <name> (verbatim from the `####` heading in tasks.md)
+- **What:** <1-2 sentences: what the block builds and why it exists, derived from the parent user story's **Goal** line and the block's task texts. Plain language, no FR/DI recap.>
 - **Tasks:** T0NN-T0NN (tests), T0NN-T0NN (impl)
 - **Notes:** <only when something is NOT already in tasks.md — human override, hint, or extra context. Omit the line if there's nothing to add.>
 ```
 
-That is the entire body. No "ready criteria" recap, no scar list, no dispatch boilerplate.
+That is the entire body. No "ready criteria" recap, no scar list, no dispatch boilerplate. The **What** line is a hook for humans scanning the issue list (and for the dispatch daemon's logs), not a second spec: hard cap of 2 sentences, summarize rather than enumerate, and never let it contradict `tasks.md` — when in doubt, say less and let the pointer carry the detail.
 
 **Cross-block dependencies are NOT recorded in the body.** They go through GitHub's native [Issue Dependencies](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/about-issues#about-issue-dependencies) feature (right sidebar → Development / Dependencies → Blocked by). Body-field "Blocked by: #N" lines drift away from reality the moment an issue closes; the native graph stays accurate.
 
@@ -45,6 +46,7 @@ If a consuming repo wants a different dispatch label name (or none), it can over
    - Block letter (A, B, C, ...).
    - Short name (the part after `— `).
    - Task ID ranges: tests subsection (from the block heading down to the next `####` or `###` boundary in the "Tests for User Story" parent) + impl subsection (same scoping in the "Implementation for User Story" parent).
+   - The **What** summary: compose 1-2 sentences from the parent user story's **Goal** line plus the block's own task texts (what gets built, why it exists). Do not copy the Goal verbatim when it spans multiple blocks — scope the sentence to this block's slice.
    - Optional block-level Notes from the caller (CLI arg or skill input); skip the Notes line if nothing was provided.
 
 4. **Surface the plan before any write**. Echo the parsed block list + the resolved `<owner>/<repo>` + the would-be issue titles to the user. If the caller passed `--dry-run`, stop here and also render each issue's body verbatim; do NOT proceed to issue creation.
@@ -161,13 +163,14 @@ Mode-2 body shape:
 ```markdown
 - **Spec:** `specs/<NNN>-<feature>/tasks.md`
 - **Scope:** <verbatim from --title, with the "Implement " prefix stripped>
+- **What:** <1-2 sentences composed from the selected tasks' texts: what this subset builds and why it exists. Same cap and tone as Mode 1.>
 - **Tasks:** <expanded comma-separated task IDs from --tasks>
 - **Notes:** <--notes value, omitted if absent>
 ```
 
 Mode-2 differences from Mode 1's execution flow:
 
-- Skip step 3's heading parsing; use the explicit `--tasks` list.
+- Skip step 3's heading parsing; use the explicit `--tasks` list (the **What** line is composed from those tasks' texts instead of a Goal line).
 - Step 5 existing-issue check uses `--title` exact match instead of the `Implement Block <X>` pattern.
 - Skip step 8's dependency graph (the caller knows their cross-issue deps; the skill can't infer them from a custom subset).
 - Final report shows a single issue, not a list.
@@ -186,6 +189,7 @@ Mode-2 differences from Mode 1's execution flow:
 - **One issue per task.** Wrong granularity for a PR-stack project — generates 50-100 issues for a single feature, swamps the project board, and forces the assignee to thread per-task issues into a per-Block PR anyway. For non-Spec-Kit projects, drive issue creation manually with `gh issue create`.
 - **Epic issue bundling all blocks.** Adds a maintenance burden (the epic body has to be updated as blocks close) without giving a richer signal than the native GitHub Project view + Issue Dependencies graph already provide.
 - **Copying `CLAUDE.md` / constitution / scars into the body.** Source of truth lives in the file, not the issue. Both humans and any automation read `tasks.md` at implementation time; the issue body just points at it.
+- **Inflating the What line into a mini-spec.** Two sentences max, no FR/SC/DI identifiers, no task-by-task enumeration. The moment it needs a third sentence, the detail belongs in `tasks.md`, not the issue.
 - **Cross-block dependency lines in the body** (e.g. "Blocked by: Block A"). Use GitHub's native Issue Dependencies feature instead — both humans and automation consume it from the sidebar. Body-field links drift when issues close.
 - **Stuffing the issue with extra labels.** The single dispatch label (`swa-impl-block` by default) is the contract — it tells the downstream coder-agent the issue is ready to pick up. Priority, milestone, `ready`, `area/*` etc. are the consuming project's PM-workflow concern and go on after creation via `gh issue edit`. Baking multiple labels in here couples the skill to one project's workflow.
 
