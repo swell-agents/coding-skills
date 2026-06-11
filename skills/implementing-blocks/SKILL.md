@@ -1,7 +1,7 @@
 ---
 name: implementing-blocks
-description: Implement one Spec Kit `tasks.md` PR-stack block end-to-end — TDD + review + draft PR + CI fix loop.
-allowed-tools: Read, Edit, Write, Grep, Glob, Bash(git fetch *), Bash(git status *), Bash(git checkout *), Bash(git pull --ff-only *), Bash(git push origin *), Bash(git push -u origin *), Bash(git rev-parse *), Bash(git log *), Bash(git diff *), Bash(git branch *), Bash(git add *), Bash(git commit *), Bash(git stash *), Bash(gh pr create *), Bash(gh pr checks *), Bash(gh pr view *), Bash(gh pr ready *), Bash(gh run view *), Bash(make *), Bash(uv run *), Bash(go test *), Bash(go vet *), Bash(golangci-lint *), Bash(forge *), Bash(solhint *), Bash(pip-audit *), Bash(govulncheck *), Bash(pytest *)
+description: Implement one Spec Kit `tasks.md` PR-stack block end-to-end — TDD + review + PR + CI fix loop.
+allowed-tools: Read, Edit, Write, Grep, Glob, Bash(git fetch *), Bash(git status *), Bash(git checkout *), Bash(git pull --ff-only *), Bash(git push origin *), Bash(git push -u origin *), Bash(git rev-parse *), Bash(git log *), Bash(git diff *), Bash(git branch *), Bash(git add *), Bash(git commit *), Bash(git stash *), Bash(gh pr create *), Bash(gh pr checks *), Bash(gh pr view *), Bash(gh run view *), Bash(make *), Bash(uv run *), Bash(go test *), Bash(go vet *), Bash(golangci-lint *), Bash(forge *), Bash(solhint *), Bash(pip-audit *), Bash(govulncheck *), Bash(pytest *)
 ---
 
 ## When this skill applies
@@ -138,7 +138,7 @@ If any gate fails — fix in place, re-run Phase 3's review pass on the fix, and
    git push -u origin <branch-name>
    ```
 
-2. **Open a draft PR**. Any text sourced from `tasks.md` headings (block name, feature name, etc.) MUST be passed via `--body-file` or as a discrete `--title` argument — never spliced into a shell command string — so that backticks, `$(…)`, quotes, or `EOF` sentinels embedded in headings cannot break out of the command line:
+2. **Open a PR** (a normal one, not a draft — review + gates already ran before push; the human gate is the merge, not the review-readiness flag). Any text sourced from `tasks.md` headings (block name, feature name, etc.) MUST be passed via `--body-file` or as a discrete `--title` argument — never spliced into a shell command string — so that backticks, `$(…)`, quotes, or `EOF` sentinels embedded in headings cannot break out of the command line:
    ```bash
    # Render the body to a temp file (no shell expansion at any step).
    BODY=$(mktemp)
@@ -156,7 +156,7 @@ If any gate fails — fix in place, re-run Phase 3's review pass on the fix, and
    # Substitute placeholders inline in the file, never on the command line.
    # (Use Edit/Write tool calls to fill <X>, <name>, etc. — do not pass tasks.md text through `sed`/`printf` arguments.)
 
-   gh pr create --draft --base main --title "$TITLE" --body-file "$BODY"
+   gh pr create --base main --title "$TITLE" --body-file "$BODY"
    rm -f "$BODY"
    ```
 
@@ -181,12 +181,12 @@ If any gate fails — fix in place, re-run Phase 3's review pass on the fix, and
      f. Re-watch CI. Loop.
    - **3 CI iterations exhausted with failures remaining** → **HALT**. Print the failures and PR link. Human takes over.
 
-5. **CI green** — leave the PR as draft. The human's "ready for review" click is the explicit handoff. Do not run `gh pr ready` by default.
+5. **CI green** — the PR is ready for human review as-is. Merging remains the human's prerogative; do not merge or approve.
 
 6. **Print final summary**:
    - Block implemented: `<Block X — <name>>`
    - Branch: `<branch-name>`
-   - PR: `<PR URL>` (draft, awaiting human review)
+   - PR: `<PR URL>` (awaiting human review and merge)
    - Tasks closed: `[X]` count
    - Commits added since baseline: `git log --oneline <baseline>..HEAD`
    - Review iterations: `<n>` of 3
@@ -198,12 +198,11 @@ If any gate fails — fix in place, re-run Phase 3's review pass on the fix, and
 
 - Do **not** force-push (no `--force`, no `--force-with-lease`). Append fix commits.
 - Do **not** squash, rebase, or merge the PR. Human prerogative.
-- Do **not** mark the PR ready (`gh pr ready`) by default — leave that as the human handoff.
 - Do **not** mark review conversations resolved or auto-comment on review threads.
 - Do **not** skip git hooks (`--no-verify`).
 - Do **not** push directly to `main`.
 
-The human reviews the PR, decides whether the diff is mergeable, and clicks merge. The skill's job ends at "draft PR, CI green".
+The human reviews the PR, decides whether the diff is mergeable, and clicks merge. The skill's job ends at "PR open, CI green".
 
 ## Constraints and gotchas
 
@@ -212,7 +211,7 @@ The human reviews the PR, decides whether the diff is mergeable, and clicks merg
 - **Multiple in-progress blocks**: this skill operates on one block at a time. If two blocks are partially done, pick one explicitly; do not default to "next ready" because there isn't one cleanly ready.
 - **Subagent file changes**: Phase 2's subagent runs WITHOUT `isolation: "worktree"` — its edits and commits land in the main repo on the branch where Phase 3 can review them. Do not add the `worktree` flag; it isolates the implementation away from the review pass.
 - **Acceptance-auditor in Phase 3** discovers Spec Kit projects on its own and resolves the active block from branch name + commit subjects. The branch convention from Phase 1.5 (`<NNN>-block-<letter>-...`) and the `[Spec Kit] Implement Block <X>` commit subject give it unambiguous context — no orchestrator-side prompt injection needed.
-- **Push happens automatically**: review + Phase 4 gates clean before Phase 5 push. The human gate moves from "should I push" (covered by Phase 3+4 review) to "should I merge" (covered by the draft PR + human approval).
+- **Push happens automatically**: review + Phase 4 gates clean before Phase 5 push. The human gate moves from "should I push" (covered by Phase 3+4 review) to "should I merge" (covered by the open PR + human approval).
 - **Non-FF main**: Phase 1.5 uses `git pull --ff-only`. If main has diverged from origin, the skill halts. Reconciling diverged main is a human decision (rebase vs merge vs cherry-pick), not an auto-resolved op.
 
 ## What this skill is NOT
@@ -220,7 +219,7 @@ The human reviews the PR, decides whether the diff is mergeable, and clicks merg
 - **Not a daemon.** One-shot, manual invocation.
 - **Not multi-block.** One block per invocation.
 - **Not multi-feature.** Operates on the active feature only.
-- **Not a PR merger.** Opens a draft PR; humans merge.
+- **Not a PR merger.** Opens a PR; humans merge.
 - **Not a GitHub issue lifecycle manager.** This skill is offline-task-list-driven and pushes a PR per block; consuming issues is the job of upstream tools.
 
 ## Cross-references

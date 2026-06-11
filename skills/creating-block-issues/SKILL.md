@@ -49,6 +49,8 @@ If a consuming repo wants a different dispatch label name (or none), it can over
    - The **What** summary: compose 1-2 sentences from the parent user story's **Goal** line plus the block's own task texts (what gets built, why it exists). Do not copy the Goal verbatim when it spans multiple blocks — scope the sentence to this block's slice.
    - Optional block-level Notes from the caller (CLI arg or skill input); skip the Notes line if nothing was provided.
 
+3a. **Coverage check (every task belongs to a block)**. Collect every `- [ ] T\d{3}` task ID in the file and verify each falls inside some block's heading-to-next-boundary range. Tasks outside any block (the classic case: a final "Polish & Cross-Cutting" phase with no `#### Block` heading) are an ERROR, not a silent skip — they would never get an issue and the feature ships without its closeout (scar: swell-storage-contracts 001 and 002 both needed manual post-hoc closeouts for exactly this). On uncovered tasks: report the orphaned IDs and ask the user whether to (a) fix `tasks.md` first by wrapping them in a `### Block <X>: Closeout (PR-<X>)` heading (preferred; re-run after), or (b) proceed creating issues for covered blocks only, explicitly accepting the gap. Never proceed silently.
+
 4. **Surface the plan before any write**. Echo the parsed block list + the resolved `<owner>/<repo>` + the would-be issue titles to the user. If the caller passed `--dry-run`, stop here and also render each issue's body verbatim; do NOT proceed to issue creation.
 
 5. **Check for existing block-issues**. Run `gh issue list --search "Implement Block <X> in:title" --state all` for each block. If any return a non-empty match, **abort** and report the existing issue numbers. Ask the user how to proceed (re-open via UI, skip the block, supersede with a new issue manually). Never overwrite or auto-close.
@@ -195,4 +197,4 @@ Mode-2 differences from Mode 1's execution flow:
 
 ## See also
 
-- [`implementing-blocks`](../implementing-blocks/SKILL.md) — the skill that consumes these issues (TDD + review + draft PR + CI fix loop, one Block per invocation).
+- [`implementing-blocks`](../implementing-blocks/SKILL.md) — the skill that consumes these issues (TDD + review + PR + CI fix loop, one Block per invocation).

@@ -30,4 +30,4 @@ The dispatch label is the signal a downstream coder-agent daemon polls for. Addi
 
 Echo the resolved `<owner>/<repo>` back before any state-changing `gh` call. Never create issues in a repo whose `origin` URL was not just echoed.
 
-Counterpart: [`/coding-skills:block-implement`](block-implement.md) implements one Block end-to-end (TDD + review + draft PR + CI fix loop) from the issues this command creates.
+Counterpart: [`/coding-skills:block-implement`](block-implement.md) implements one Block end-to-end (TDD + review + PR + CI fix loop) from the issues this command creates.
