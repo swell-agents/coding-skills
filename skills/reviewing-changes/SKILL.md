@@ -1,12 +1,12 @@
 ---
 name: reviewing-changes
-description: Five-pass review of a diff: code, security, architecture, acceptance, AI-native.
+description: Four-pass review of a diff: code, security, architecture, acceptance. Optional AI-native pass on explicit request.
 allowed-tools: Read, Grep, Glob, Bash(git diff *), Bash(git log *), Bash(git show *), Bash(git status *), Bash(git rev-parse *), Bash(gh pr view *), Bash(gh pr diff *), Bash(gh pr list *), Bash(uv run ruff *), Bash(uv run mypy *), Bash(uv run pip-audit *), Bash(npm audit *), Bash(golangci-lint *), Bash(govulncheck *), Bash(gosec *), Bash(solhint *), Bash(forge fmt --check), WebSearch, WebFetch
 ---
 
 ## Process
 
-Always run the five passes in order. Findings flow into one combined verdict.
+Always run the four default passes in order. Findings flow into one combined verdict. Pass 5 (AI-native practices) is opt-in: run it only when the user explicitly asks for it — some repos are deliberately not AI-native and should not be graded against that rubric.
 
 ### 1. Read the rules
 
@@ -78,9 +78,9 @@ Does the diff actually solve the contract — linked GitHub issue, PR descriptio
 
 See `agents/acceptance-auditor.md` for the full procedure.
 
-### 7. Pass 5 — AI-Native-Coding Practices
+### 7. Pass 5 — AI-Native-Coding Practices (opt-in, not part of the default gate)
 
-Validates the diff and the surrounding project against the empirically-grounded rubric for working with AI coding agents. Eight rules, citation-grounded:
+Run only on explicit request (e.g. `/coding-skills:review ai-native` or the user asking for an AI-native check). Validates the diff and the surrounding project against the empirically-grounded rubric for working with AI coding agents. Eight rules, citation-grounded:
 
 - **R1** — Comments WHY not WHAT (load-bearing for LLM coding; inaccurate comments harmful).
 - **R2** — Durable agent context belongs in instruction files. At least one of AGENTS.md / CLAUDE.md / `.cursor/rules/` must exist at repo root; section structure is guidance, not a graded checklist.
@@ -104,13 +104,14 @@ The rubric, with citations, lives at `reference/ai-native-rubric.md`. The mechan
 | Security            | pass/warn/fail | N        | N     | N     |
 | Architecture        | pass/warn/fail | N        | N     | N     |
 | Acceptance          | pass/warn/fail | N        | N     | N     |
-| AI-Native Practices | pass/warn/fail | N        | N     | N     |
 
 **Overall**: PASS / NEEDS WORK / FAIL
 
 ### Action items
 1. <Critical/Major items, ordered>
 ```
+
+Append an `AI-Native Practices` row only when the opt-in Pass 5 ran.
 
 For each individual finding:
 
@@ -147,6 +148,6 @@ The live subagent shims that wrap this skill for parallel execution live one lev
 - `agents/security-auditor.md` — Pass 2 (security)
 - `agents/architect-review.md` — Pass 3 (architecture)
 - `agents/acceptance-auditor.md` — Pass 4 (acceptance / intent)
-- `agents/ai-native-reviewer.md` — Pass 5 (AI-native-coding practices)
+- `agents/ai-native-reviewer.md` — Pass 5 (AI-native-coding practices, opt-in)
 
-Each is a thin shim that reads this `SKILL.md` (and, for Pass 5, also `reference/ai-native-rubric.md`) and applies its scoped pass; the `/coding-skills:review` slash command spawns the five in parallel under `model: opus`.
+Each is a thin shim that reads this `SKILL.md` (and, for Pass 5, also `reference/ai-native-rubric.md`) and applies its scoped pass; the `/coding-skills:review` slash command spawns the four default passes in parallel under `model: opus`, adding Pass 5 only on explicit request.
