@@ -8,6 +8,13 @@ All notable changes to this repository will be documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2026-07-16
+
+### Changed
+
+- **AI-native pass is now opt-in.** The default review gate (`/coding-skills:review`, `reviewing-changes` skill, `implementing-blocks` Phase 3) runs four passes: code, security, architecture, acceptance. The AI-native-practices pass (`ai-native-reviewer`, rubric R1..R8) runs only on explicit request — pass `ai-native` to the command or ask for it. Rationale: some repos are deliberately not AI-native and should not be graded against that rubric. Spec Kit block implementation still includes the pass (Spec Kit projects are AI-native by construction).
+- `.claude-plugin/plugin.json`: version bumped `2.1.4` -> `2.2.0`.
+
 ## [2.1.4] - 2026-06-10
 
 ### Added

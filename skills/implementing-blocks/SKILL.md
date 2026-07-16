@@ -105,13 +105,13 @@ The subagent reports back:
 
 ## Phase 3 — Review feedback loop (max 3 iterations)
 
-Run [`reviewing-changes`](../reviewing-changes/SKILL.md) — typically via `/coding-skills:review <baseline>..HEAD`. The wrapper invokes the five sibling agents in parallel, opus-pinned, in isolated context (different model than the implementation pass): code-reviewer, security-auditor, architect-review, acceptance-auditor, ai-native-reviewer.
+Run [`reviewing-changes`](../reviewing-changes/SKILL.md) — typically via `/coding-skills:review <baseline>..HEAD`. The wrapper invokes the four sibling agents in parallel, opus-pinned, in isolated context (different model than the implementation pass): code-reviewer, security-auditor, architect-review, acceptance-auditor. Spec Kit projects are AI-native by construction, so also pass `ai-native` to include the opt-in ai-native-reviewer pass.
 
-The wrapper aggregates the five verdicts into a Quality Gate Summary table per [`reviewing-changes`](../reviewing-changes/SKILL.md).
+The wrapper aggregates the verdicts into a Quality Gate Summary table per [`reviewing-changes`](../reviewing-changes/SKILL.md).
 
 For each finding by severity:
 
-- **Critical / Major** — fix in place. One commit per fix with subject `Fix <severity>: <one-line summary>`. Then re-run the five-pass review against the new HEAD.
+- **Critical / Major** — fix in place. One commit per fix with subject `Fix <severity>: <one-line summary>`. Then re-run the review against the new HEAD.
 - **Minor** — collect into a follow-up note for the human PR description. Do NOT block on Minor.
 
 Iteration cap: **3** review → fix → re-review cycles. If after 3 iterations Critical findings remain — **HALT** and summarise. Do not push, do not auto-resolve. Surface the unfixed issues for human review.
@@ -225,7 +225,7 @@ The human reviews the PR, decides whether the diff is mergeable, and clicks merg
 ## Cross-references
 
 - [`running-tdd-cycles`](../running-tdd-cycles/SKILL.md) — the red-green-refactor discipline applied inside Phase 2.
-- [`reviewing-changes`](../reviewing-changes/SKILL.md) — Phase 3's five-pass review.
+- [`reviewing-changes`](../reviewing-changes/SKILL.md) — Phase 3's parallel review.
 - [`committing-changes`](../committing-changes/SKILL.md) — commit-message and branch-protection rules used throughout.
 - [`engineering-philosophy`](../engineering-philosophy/SKILL.md) — KISS / YAGNI / DRY / fail-fast applied during Phase 2.
 - [`python-conventions`](../python-conventions/SKILL.md) / [`go-conventions`](../go-conventions/SKILL.md) / [`solidity-conventions`](../solidity-conventions/SKILL.md) — Phase 4 final-gate commands.
