@@ -9,7 +9,9 @@ alwaysApply: true
 - **Architecture** — Class responsibilities defined in the project's architecture map (often `docs/architecture.md`).
 - **KISS** — Simple solutions over complex ones.
 - **YAGNI** — Build only what's needed now. Less code is better.
+- **Minimal Scope** - Narrowest visibility that works: keep methods and attributes private (`_name` in Python) unless something outside the class needs them; don't export what only one module uses. Widen only when a real consumer appears.
 - **Write Less** - If you can avoid writing the code or the comment, don't. A comment earns its place only when it says what the code cannot: a why, an invariant, a magic-number derivation, never a restatement. **Default every comment to one line.** Multi-line is allowed ONLY for a byte-layout, a derivation, or a non-obvious why that needs the room. This covers every comment, source, config, and CI YAML alike; before committing, re-read each comment you added and cut it to one line or delete it.
+- **One-Line Diagnostics** - Error messages and comments fit on one line within the line-length limit; keep exception texts short enough that the whole `raise` statement is a single line.
 - **DRY** — Single source of truth. Never copy-paste. Reuse spans the repo: prefer an existing sibling idiom over a second variant.
 - **OOP** — Follow OOP approach and best practices.
 - **SOLID** — Enforce Single Responsibility; keep the others in mind when possible.
